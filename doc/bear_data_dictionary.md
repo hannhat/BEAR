@@ -8,6 +8,9 @@ filtering and dataset-specific conventions.
 | `dataset` | Source BEAR dataset. | Defines the source universe and construction rules. |
 | `metaid` | Higher-level analysis identifier. | Meta-analysis, review, replicated finding or analogous grouping; see each dataset page. |
 | `studyid` | Best available source-unit identifier. | Study, paper, trial, replication site/sample, or a documented approximation. |
+| `doi_meta` | DOI of the meta-analysis or systematic review containing the result. | Present only where that publication is identified. |
+| `doi_study` | DOI of the individual paper containing the study result. | Missing where no matching paper DOI is established. |
+| `doi_replication` | DOI of the publication reporting a replication. | May be shared by several replicated studies. |
 | `topic` | What the research is about. | Source-specific subject classification; not harmonised across datasets. |
 | `subset` | How observations are divided. | Sampling, provenance, reporting or analysis grouping. |
 | `method` | Study design or identification strategy. | Standardised categories listed in Method. |
@@ -18,7 +21,7 @@ filtering and dataset-specific conventions.
 | `p` | p-value | Interpretation and sidedness depend on the source. |
 | `b` | Effect estimate. | On the scale given by `effect_scale`, where known. |
 | `se` | Standard error corresponding to `b`. | Reported or derived. |
-| `ss` | Sample size. | Source-specific definition; consult the dataset page. |
+| `ss` | Sample size. | Number of subjects or units used to obtain the estimate. |
 | `year` | Study, publication or registry year. | Convention depends on the dataset. |
 | `orig.z` | Original-study z-value attached to a replication. | Direction follows the original study. |
 | `orig.z_operator` | Bound on the original-study z magnitude. | Same convention as `z_operator`. |
@@ -29,6 +32,11 @@ filtering and dataset-specific conventions.
 | `outcome_group` | Cochrane outcome grouping. | The retained Cochrane sample contains efficacy outcomes. |
 | `source` | Retained source-specific provenance. | `claim_text` for SCORE claims, `replication` for SCORE replications and Many Labs 2, and `PLOS supporting MAT file` for Szucs. |
 
+`ss` records the number of subjects or other observational units contributing
+to an estimate, where known. It does not count estimates in a meta-analysis.
+Check the source units and reported values before mapping this field; leave
+it missing when a defensible sample size is unavailable.
+
 ## Identifiers
 
 `studyid` is not globally unique. Its construction differs by dataset and its
@@ -37,6 +45,18 @@ reliable study identifier: BEAR then uses a documented approximate identifier
 or, as a last resort, a row-unique ID. Such IDs do not establish that distinct
 rows come from distinct primary studies. Every dataset page describes its
 construction and limitations.
+
+DOI fields distinguish the publication level. In individual dataset files,
+`doi_collection` identifies a publication containing several meta-analyses,
+`doi_meta` identifies a meta-analysis or systematic review, and `doi_study`
+identifies an individual paper. Only fields available for a dataset are
+included. The combined `BEAR.rds` retains `doi_meta`, `doi_study` and
+`doi_replication` where available. Collection DOIs remain in the individual
+datasets. A DOI does not replace `studyid`, `metaid`, a PMID or a trial
+registration ID.
+For replication outputs, `doi_study` identifies the original paper on both
+matched rows. `doi_replication` identifies the replication publication where
+one is known; a shared replication paper can cover several original studies.
 
 `metaid` usually identifies a meta-analysis, systematic review, replicated
 effect, research question or analogous grouping. Its precise meaning is
