@@ -180,7 +180,8 @@ dictionary_lines <- function(source_file) {
     "../../doc/datasets",
     basename(dictionary_source)
   )
-  c(paste0("{{< include ", dictionary_include, " >}}"), "")
+  c("::: {.dataset-dictionary}", "",
+    paste0("{{< include ", dictionary_include, " >}}"), "", ":::", "")
 }
 
 dataset_description_lines <- function(source_file) {
@@ -268,6 +269,10 @@ invisible(lapply(seq_len(nrow(dataset_index)), function(i) {
     "format:",
     "  html:",
     "    toc: true",
+    "    grid:",
+    "      body-width: 1050px",
+    "      sidebar-width: 220px",
+    "      margin-width: 180px",
     "---",
     "",
     dataset_page_tags_html(page_datasets),

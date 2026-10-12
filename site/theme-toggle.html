@@ -1,0 +1,32 @@
+<script>
+// Keep Quarto's theme persistence and styles, with a labelled navbar button.
+document.addEventListener('DOMContentLoaded', () => {
+  const nativeToggle = document.querySelector('.quarto-color-scheme-toggle');
+  if (!nativeToggle) return;
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'theme-toggle';
+  toggle.textContent = 'Toggle theme';
+  nativeToggle.before(toggle);
+  const sync = () => toggle.setAttribute('aria-pressed',
+    String(document.body.classList.contains('quarto-dark')));
+  toggle.addEventListener('click', () => {
+    window.quartoToggleColorScheme();
+    sync();
+  });
+  new MutationObserver(sync).observe(document.body,
+    { attributes: true, attributeFilter: ['class'] });
+  sync();
+
+  // Dataset detail pages belong to the Datasets navigation tab.
+  if (document.querySelector('.dataset-page-tags')) {
+    const link = document.querySelector('.navbar a[href$="/datasets.html"]');
+    if (link) {
+      document.querySelectorAll('.navbar .nav-link.active').forEach(item => {
+        item.classList.remove('active'); item.removeAttribute('aria-current');
+      });
+      link.classList.add('active'); link.setAttribute('aria-current', 'page');
+    }
+  }
+});
+</script>

@@ -39,9 +39,12 @@ bibliography: ../doc/references.bib
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: [cosmo, dark.scss]
+    include-after-body: theme-toggle.html
     css: styles.css
     toc: true
     code-fold: true
     fig-align: center
-    link-external-newwindow: true
+    link-external-newwindow: false

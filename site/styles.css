@@ -154,6 +154,7 @@
   box-shadow: 0 8px 20px rgba(23, 32, 51, 0.2);
   color: #fff;
   content: attr(data-tooltip);
+  display: none;
   font-size: 0.78rem;
   font-weight: 400;
   left: 50%;
@@ -173,6 +174,7 @@
 
 [data-tooltip]:hover::after,
 [data-tooltip]:focus::after {
+  display: block;
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   visibility: visible;
@@ -285,7 +287,6 @@
 .model-summary-details dd {
   margin: 0;
 }
-}
 
 .dataset-tag {
   border: 1px solid transparent;
@@ -386,3 +387,117 @@
     gap: 0.15rem;
   }
 }
+
+
+/* Shared surfaces, active navigation and download instructions. */
+:root {
+  --bear-surface: #f8fafc;
+  --bear-border: #d7dde8;
+  --bear-ink: #243044;
+  --bear-muted: #5b6473;
+  --bear-accent: #7c3f2b;
+}
+body.quarto-dark {
+  --bear-surface: #26353b;
+  --bear-border: #415057;
+  --bear-ink: #e6ecea;
+  --bear-muted: #bdcbc9;
+  --bear-accent: #d49a76;
+}
+.navbar .nav-link.active {
+  background: rgba(39, 128, 227, 0.1);
+  border-radius: 4px;
+  box-shadow: inset 0 -2px 0 currentColor;
+}
+.quarto-dark .navbar .nav-link.active {
+  background: rgba(255, 255, 255, 0.18);
+}
+.navbar .quarto-color-scheme-toggle { display: none; }
+.theme-toggle {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  margin: 0.3rem 0.6rem;
+  padding: 0.4rem 0.65rem;
+  white-space: nowrap;
+}
+.navbar .theme-toggle { color: var(--bs-navbar-color, #fff); }
+.theme-toggle:hover { background: rgba(255, 255, 255, 0.12); }
+.theme-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.get-data-page pre,
+.get-data-page div.sourceCode {
+  background: var(--bear-surface);
+  border: 1px solid var(--bear-border);
+  border-radius: 6px;
+}
+.get-data-page pre { padding: 1rem; }
+.get-data-page div.sourceCode pre { border: 0; margin: 0; }
+.bear-download.callout {
+  background: var(--bear-surface);
+  border: 1px solid var(--bear-border);
+  border-left: 6px solid var(--bear-accent) !important;
+  box-shadow: 0 5px 18px rgba(32, 40, 54, 0.08);
+  font-size: 1.05rem;
+  padding: 1rem 1.2rem;
+}
+
+/* Give definitions and summaries space, with consistent column proportions. */
+.dataset-dictionary { min-width: 0; max-width: 100%; }
+.dataset-dictionary table { table-layout: fixed; width: 100%; }
+.dataset-dictionary colgroup { display: none; }
+.dataset-dictionary th:first-child { width: 21%; }
+.dataset-dictionary th:nth-child(2) { width: 43%; }
+.dataset-dictionary th:nth-child(3) { width: 36%; }
+.dataset-dictionary td,
+.dataset-dictionary th {
+  overflow-wrap: anywhere;
+  padding: 0.65rem 0.75rem;
+  vertical-align: top;
+}
+.dataset-dictionary code { white-space: normal; }
+@media (max-width: 700px) {
+  .dataset-dictionary { overflow-x: auto; }
+  [data-tooltip]::after,
+  [data-tooltip]:hover::after,
+  [data-tooltip]:focus::after {
+    bottom: 1rem;
+    left: 1rem;
+    position: fixed;
+    top: auto;
+    transform: none;
+    width: calc(100vw - 2rem);
+  }
+  .dataset-dictionary table { min-width: 620px; }
+}
+
+/* Custom components use the same dark surfaces as the document theme. */
+.quarto-dark .bear-metric,
+.quarto-dark .dataset-tag-legend,
+.quarto-dark .model-summary-title,
+.quarto-dark .model-summary-details,
+.quarto-dark .model-summary th {
+  background: var(--bear-surface);
+  border-color: var(--bear-border);
+  color: var(--bear-ink);
+}
+.quarto-dark .bear-metric { border-left-color: var(--bear-accent); }
+.quarto-dark .bear-metric-value,
+.quarto-dark .dataset-tag-legend-title,
+.quarto-dark .dataset-at-a-glance-item strong,
+.quarto-dark .model-summary td strong,
+.quarto-dark .model-summary-details dt { color: var(--bear-ink); }
+.quarto-dark .bear-home-title p,
+.quarto-dark .quarto-title-block .subtitle,
+.quarto-dark .bear-metric-label,
+.quarto-dark .dataset-hover-hint,
+.quarto-dark .dataset-tag-label,
+.quarto-dark .dataset-at-a-glance-item span { color: var(--bear-muted); }
+.quarto-dark .dataset-at-a-glance,
+.quarto-dark .model-summary { border-color: var(--bear-border); }
+.quarto-dark .model-summary-details summary { color: #9bd6d1; }
+.quarto-dark .bear-home-logo img,
+.quarto-dark .bear-banner { filter: invert(0.9); }

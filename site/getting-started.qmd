@@ -1,5 +1,6 @@
 ---
 title: "Get data"
+body-classes: get-data-page
 ---
 
 I currently made BEAR dataset to work well with R workflow. If another format 
@@ -17,7 +18,7 @@ Alternatively, in command line do
 curl -L -o BEAR.rds https://github.com/wwiecek/BEAR/releases/download/v2/BEAR.rds
 ```
 
-** (2) I want to re-generate BEAR.rds or work with individual datasets**
+**(2) I want to re-generate BEAR.rds or work with individual datasets**
 
 You can also re-generate that file yourself. To work with individual datasets or to do more manipulation of inputs, you need to take an additional step. After cloning this repo (which only includes code and outputs), you need to grab a "submodule" repo that has contents of `data/` folder. In command line you will need:
 
@@ -32,7 +33,7 @@ That will download about 100 MB of latest versions of individual datasets. In ot
 words, downloading all of the input data files is opt-in rather than part of this 
 repo, to keep the repo size minimal.
 
-** (3) If you want to look at version control for BEAR datasets** in the last line do
+**(3) If you want to look at version control for BEAR datasets** in the last line do
 
 ```
 git submodule update --init --recursive
@@ -41,8 +42,8 @@ git submodule update --init --recursive
 instead. This will download full version control of BEAR datasets.
 
 
-** (4) If you want to re-derive each of the datasets yourself**, you can see all of data processing done for individual datasets in `process/`. For many datasets there is nil processing done by us, but for some there are extensive scripts to download and clean up data.
+**(4) If you want to re-derive each of the datasets yourself**, you can see all of data processing done for individual datasets in `process/`. For many datasets there is nil processing done by us, but for some there are extensive scripts to download and clean up data.
 
-Once datasets are present in `data/`, `BEAR.rds` is stiched together in script `workflow/build_bear.R` which does some of the processing described in [datasets documentation](doc/datasets.pdf).
+Once datasets are present in `data/`, `BEAR.rds` is stiched together in script `workflow/build_bear.R` which does some of the processing described in [datasets documentation](datasets.qmd).
 
 
