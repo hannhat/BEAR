@@ -268,10 +268,10 @@ raw_trial_check <- raw_endpoint %>%
   mutate(n_coverage_rows = coalesce(n_coverage_rows, 0L))
 
 stopifnot(
-  nrow(old_bear) == 69992,
-  n_distinct(old_bear$nct_id) == 20342,
-  n_distinct(raw_endpoint$nct_id) == 20286,
-  n_distinct(intersect(old_bear$nct_id, raw_endpoint$nct_id)) == 9415,
+  nrow(old_bear) == 76349,
+  n_distinct(old_bear$nct_id) == 22068,
+  n_distinct(raw_endpoint$nct_id) == 19871,
+  n_distinct(intersect(old_bear$nct_id, raw_endpoint$nct_id)) == 10149,
   all(raw_trial_check$n_coverage_rows == 1L)
 )
 

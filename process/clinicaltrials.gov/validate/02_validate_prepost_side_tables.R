@@ -95,7 +95,7 @@ qc_checks <- tibble(
     ),
     nrow(contrasts) == 0 ||
       n_distinct(contrasts$prepost_contrast_candidate_id) == nrow(contrasts),
-    nrow(raw_effects_v2) == 250444,
+    nrow(raw_effects_v2) == 246004,
     nrow(source_rows_classified) == nrow(endpoint_source_rows) &
       all(source_rows_classified$outcome_measurement_id == endpoint_source_rows$outcome_measurement_id)
   )

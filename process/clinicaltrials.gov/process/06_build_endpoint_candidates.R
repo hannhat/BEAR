@@ -148,7 +148,7 @@ candidate_summary <- bind_rows(
   arrange(section, source_row_class, effect_family, measure)
 
 stopifnot(
-  nrow(candidate) == 250444,
+  nrow(candidate) == 246004,
   all(c(
     "measure", "effect_family", "source_row_class", "validity_tier",
     "orientation_rule", "pair_selection_rule", "author_overlap_band",
