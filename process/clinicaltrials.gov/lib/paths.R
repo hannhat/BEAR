@@ -3,7 +3,7 @@
 ctgov_root <- "data_raw/clinicaltrials.gov"
 ctgov_process_dir <- "process/clinicaltrials.gov"
 ctgov_snapshot_zip <- file.path(
-  ctgov_root, "12082025", "a1hlrix83cqvhi5qn0jya3f8mdik.zip"
+  ctgov_root, "13102026", "briz20jy4pzxe9cbsvkjw6lki2oa.zip"
 )
 
 ctgov_derived_dir <- file.path(ctgov_root, "derived")

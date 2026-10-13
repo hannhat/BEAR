@@ -10,7 +10,7 @@
 # install.packages(c("readr","dplyr","tidyr","stringr"))
 library(readr); library(dplyr); library(tidyr); library(stringr)
 
-dir <- "data_raw/clinicaltrials.gov/12082025"
+dir <- "data_raw/clinicaltrials.gov/13102026/briz20jy4pzxe9cbsvkjw6lki2oa"
 
 # --- core tables ---
 studies <- read_delim(
