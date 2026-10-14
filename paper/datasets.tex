@@ -282,52 +282,73 @@ by their standard errors.
 
 \newpage
 
-\subsection{Arel-Bundock et al 2022 (political
-science)}\label{arel-bundock-et-al-2022-political-science}
+\subsection{Arel-Bundock et al 2022 (political science)}\label{arel-bundock-et-al-2022-political-science}
 
-\textbf{Reference:} Arel-Bundock et al. (2022).
+\textbf{Reference:}
+Arel-Bundock et al. (2022).
 
-\textbf{Research question:} assess statistical power in political
-science research
+\textbf{Research question:}
+assess statistical power in political science research
 
-\textbf{Data availability:} The replication package (a zip file dated
-\texttt{20241010}) is available at \url{https://osf.io/fgdet}. All data
-are in the public domain.
+\textbf{Data availability:}
+The replication package (a zip file dated \texttt{20241010}) is available at
+\url{https://osf.io/fgdet}. All data are in the public domain.
 
-\textbf{Data description and source:} The authors searched for
-meta-analytic articles across 141 journals in political science and
-contacted their authors. The resulting source dataset contains 16,649
-hypothesis tests, grouped in 351 meta-analyses and reported in 46
-peer-reviewed meta-analytic articles.
+\textbf{Data description and source:}
+The authors searched for meta-analytic articles across 141 journals in
+political science and contacted their authors. The resulting source dataset contains 16,649
+hypothesis tests, grouped in 351 meta-analyses and reported in 46 peer-reviewed
+meta-analytic articles.
 
-\textbf{Notes:} This dataset collects meta-analysis inputs, rather than
-repeating data extraction from individual studies. It combines an
-earlier dataset from Doucouliagos et al with another search. Therefore,
-some of this dataset will overlap with Askarov et al. However, the two
-articles aim to cover different fields and BEAR keeps the two datasets
-separate.
+\textbf{Notes:}
+This dataset collects meta-analysis inputs, rather than repeating data extraction
+from individual studies. It combines an earlier dataset from Doucouliagos et al with
+another search. Therefore, some of this dataset will overlap with Askarov et al.
+However, the two articles aim to cover different fields and BEAR keeps the two
+datasets separate.
 
-\textbf{Data processing:} We used the same code as the original authors
-(a replication package that uses makefiles), but skipped some additional
-processing they performed for their paper. BEAR uses
-\texttt{question\_id} as \texttt{metaid} (351 groups defined by
-meta-analysis or research question). Signed z-values were computed as
-reported estimates divided by their standard errors. We verified that
-the distributions of z-values matched those in the article.
+\textbf{Data processing:}
+We used the same code as the original authors (a replication package that uses
+makefiles), but skipped some additional processing they performed for their paper.
+BEAR uses \texttt{question\_id} as \texttt{metaid} (351 groups defined by meta-analysis or research question).
+Signed z-values (\texttt{z}) are reported estimates divided by their standard
+errors. We verified that their distribution matched the article.
 
 \textbf{Study characteristics:}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Study ID:} we use author's study ID; for \textbf{meta-analysis
-  ID} we use \texttt{question\_id}.
+  \textbf{Study ID:} we use author's study ID; for \textbf{meta-analysis ID} we use \texttt{question\_id}.
 \item
-  \texttt{subset} column is the source \texttt{meta\_id}
+  \texttt{subset} is the source article's \texttt{meta\_id}; each article may contain several
+  groupings into meta-analyses
 \item
-  We do not have information on the study design or measure of effect
-  size.
+  \texttt{topic} expands the source \texttt{subfield} codes to American Politics,
+  Comparative Politics, International Relations, Public Administration and
+  Political Economy. The source codes are omitted from \texttt{data/ArelBundock.rds}.
+\item
+  \texttt{topic\_detailed} is our more detailed subject classification and is
+  available only in \texttt{data/ArelBundock.rds}.
+\item
+  \texttt{doi\_collection} identifies the source publication containing a collection
+  of meta-analyses, not an individual meta-analysis or primary study.
+\item
+  \texttt{doi\_study} is the individual paper DOI, reconstructed by matching labels within
+  the dataset to bibliographies in 46 datasets and cross-referencing them.
+  However, it is only available for a minority of studies.
+\item
+  \texttt{ss} uses the source \texttt{sample\_size} rounded to an integer where positive;
+  three reported zeros are treated as missing. Sample units include people,
+  country-years and geographic grid square-years, depending on the study.
+\item
+  We do not have information on the study design or measure of effect size.
 \end{itemize}
+
+There are at least several other useful columns in the original replication
+package, which are included in \texttt{ArelBundock.rds} without any modifications.
+In particular, \texttt{overall\_effect} and \texttt{subset}, \texttt{iv} and \texttt{dv} carry a lot of
+information about what is being estimated.
 
 \newpage
 

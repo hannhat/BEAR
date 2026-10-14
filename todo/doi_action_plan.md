@@ -14,8 +14,8 @@ Retain `doi_meta`, `doi_study` and `doi_replication` where available in
 ## DOI coverage and remaining enrichment
 
 The source-file inventory below was checked against all 23 local `data/*.rds`
-files on 2 October 2026. Twelve files have a level-specific DOI column. These dated
-counts describe saved metadata; they do not imply manual verification of every
+files on 2 October 2026. The Sladekova entry was refreshed on 14 October;
+other rows retain their dated counts. These counts describe saved metadata; they do not imply manual verification of every
 DOI. Source-supplied, screened lookup and review-publication identifiers are
 distinguished explicitly.
 
@@ -44,7 +44,7 @@ distinguished explicitly.
 | `SCORE_all_claims.rds`, `doi_study` | 3,066 / 3,066 | 200 | New: source original-publication DOIs exposed separately from `studyid`. |
 | `SCORE_replications.rds`, `doi_study` | 548 / 548 | 164 | Original paper DOI is on both matched rows. |
 | `SCORE_replications.rds`, `doi_replication` | 274 / 548 | 1 | Shared SCORE publication DOI on replication rows. |
-| `Sladekova.rds` | No column | — | No DOI column; the current output has no IDs classified as DOI-derived. |
+| `Sladekova.rds`, `doi_meta` | 11,617 / 11,634 | 87 | Source meta-analytic paper DOIs from the authors' 2008/2018 sampling inventories, joined by paper key and checked against coded metadata. A191 (17 rows) remains missing by maintainer decision. No primary-study DOI is attached. |
 | `Szucs.rds` | No column | — | No DOI column; source article crosswalk needed. |
 | `WWC.rds` | No column | — | No DOI column; source citations available. |
 | `Yang.rds` | No column | — | No DOI column; primary-study bibliography needed. |
@@ -61,6 +61,23 @@ with `doi_study`; its numeric study IDs require a source-specific citation
 crosswalk. These are DOI coverage rates, not estimates of how many included
 studies were journal articles or had registered DOIs.
 
+## Sladekova: completed meta-analysis DOI enrichment (updated 14 October 2026)
+
+`doi/Sladekova/lookup_meta.R` reads the authors' source-paper sampling
+inventories and checks their DOI assignments against coded metadata. The
+accepted mapping is joined by original paper key to all imported analyses.
+`doi_meta` is retained in the individual file and combined `BEAR.rds`.
+The DOI join preserves study groupings, row order and statistical values.
+Following the Fisher-only inclusion change, all 2,758 selected BEAR rows have
+`doi_meta`, covering all 12 selected source papers. The full individual file
+still covers 11,617/11,634 rows and 87/88 papers; A191 is outside the selected
+BEAR subset. A separate public-schema cleanup removed `label_` prefixes without changing groupings.
+
+The raw CSVs contain no primary-publication DOI. Primary-paper matching is
+deferred, and A191 remains unassigned as requested. No further meta-analysis
+DOI lookup is pending for the selected BEAR rows. The Sladekova (2023)
+collection paper DOI is not used as a meta-analysis or primary-study DOI.
+
 ## Next actions
 
 1. For future DOI additions, promote only the matching publication level to
@@ -70,8 +87,9 @@ studies were journal articles or had registered DOIs.
    papers as `doi_replication`. Keep `studyid` and `metaid` unchanged. Check
    row order, statistics and all non-identifier fields after rebuilding.
 2. Continue article DOI enrichment in source datasets using the priorities and
-   qualifications under Remaining work. OSC original papers, WWC and Sladekova
-   are the smaller near-term candidates. First validate Chavalarias identifiers;
+   qualifications under Remaining work. OSC original papers and WWC are
+   smaller near-term candidates; Sladekova primary-paper matching is deferred.
+   First validate Chavalarias identifiers;
    only then plan any large PMID conversion. Barnett–Wren is another large
    batch after lookup throughput is established.
 3. Keep `studyid` and `metaid` semantics as a separate identifier review.
@@ -176,13 +194,14 @@ validation table is
 
 Priorities 2–3 and source-work rows remain follow-up work; they were not run
 as part of the 14 September inventory. Counts in this table retain the
-source-field inventory from 10 September 2026.
+source-field inventory from 10 September 2026, except Sladekova, refreshed
+on 14 October.
 
 | Priority | Dataset and available metadata | Action and qualification |
 |---|---|---|
 | 2 | OSC: 160 distinct original-study titles in 168 rows, with authors | Search original articles from title/author metadata. Treat replication-publication identifiers separately; never relabel an original DOI as a replication DOI. |
 | 2 | WWC: 1,559 citations | Extract embedded DOIs, then query full citations. Expect reports, theses and unpublished material without registered DOIs. |
-| 2 | Sladekova: 3,547 current study IDs; processing already detects DOI fields | Preserve detected source DOIs as a column. For descriptive labels, recover the corresponding primary-study bibliography within each meta-analysis before searching. |
+| Deferred source work | Sladekova: 3,557 study labels/IDs, including 1,843 row-specific fallback rows | Meta-analysis DOIs are attached as `doi_meta` (87/88 source papers; all 12 papers in Fisher-only BEAR). All 2,758 selected rows have a DOI. Leave A191 missing; it is outside the selected subset. No DOI occurs in the imported primary-study CSVs. Recover included-study bibliographies and scoped study/citation crosswalks before adding `doi_study`; do not use meta-analysis DOIs to identify primary studies. |
 | 3 | Barnett–Wren: 419,234 distinct PubMed identifiers | Batch unique PMIDs through Europe PMC after the smaller Jager–Leek run validates coverage and throughput. Reuse mappings across datasets. |
 | 3 | Chavalarias: 1,896,954 distinct article identifiers across abstract and full-text sources | Validate identifier namespaces in each source before conversion; do not assume every numeric full-text ID is a PMID. Batch validated PMIDs and retain source indicators. |
 | Source work | Costello–Fox/Yang: study labels and meta-analysis membership | Recover primary-study references from each source meta-analysis; distinguish primary articles from the meta-analysis publication. |

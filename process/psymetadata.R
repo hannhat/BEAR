@@ -1,4 +1,4 @@
-# psymetadata -----
+# Prepare package datasets, retaining their documented effect-size scales.
 library(psymetadata)
 library(tidyverse)
 
@@ -6,6 +6,16 @@ ps_items <- data(package = "psymetadata")$results %>%
   as_tibble() %>%
   pull(Item) %>%
   as.character()
+
+# Classify the selected yi/vi fields using psymetadata 1.0.1 help pages.
+fisher_subsets <- c("agadullina2018", "barroso2021", "steffens2020",
+                    "nuijten2020")
+raw_subsets <- c("gamble2019", "maccann2020", "stasielowicz2019a",
+                 "stasielowicz2019b", "stasielowicz2020", "manylabs2018")
+smd_subsets <- c("aksayli2019", "coles2019", "gnambs2020", "lowe2020",
+                 "maldonado2020", "manybabies2020", "noble2019", "sala2019",
+                 "schroeder2020", "spaniol2020", "stramaccia2021", "wibbelink2017")
+stopifnot(setequal(ps_items, c(fisher_subsets, raw_subsets, smd_subsets)))
 
 load_psy <- function(item) {
   e <- new.env(parent = emptyenv())
@@ -89,7 +99,12 @@ df_psymetadata <-
   ps_items %>%
   set_names() %>%
   map(load_psy) %>%
-  imap_dfr(standardise_psy)
+  imap_dfr(standardise_psy) %>%
+  mutate(measure = if_else(subset %in% smd_subsets, "smd", "correlation"),
+         effect_scale = case_when(subset %in% fisher_subsets ~ "fisher_z",
+                                  subset %in% raw_subsets ~ "raw",
+                                  TRUE ~ "smd")) %>%
+  relocate(measure, effect_scale, .before = z)
 
 saveRDS(df_psymetadata, "data/psymetadata.rds")
 rm(df_psymetadata)

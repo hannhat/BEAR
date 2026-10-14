@@ -55,7 +55,7 @@ Here is a short summary of what’s included in BEAR:
 | Costello and Fox | ecology & evolution | 88,218 | 466 | 12,927 | 6.8 | 41.9% |
 | Lang | economics | 3,885 | \- | 730 | 5.3 | 57.6% |
 | SCORE, all claims | social & behavioural sciences | 1,942 | \- | 159 | 12.2 | 74.9% |
-| Sladekova et al | psychology | 11,591 | 406 | 3,547 | 3.3 | 59.2% |
+| Sladekova et al | psychology | 2,758 | 70 | 1,075 | 2.6 | 53.0% |
 | Szucs and Ioannidis | cognitive neuroscience | 16,887 | \- | 2,261 | 7.5 | 62.0% |
 | Yang et al | ecology & evolution | 17,638 | 87 | 3,796 | 4.6 | 41.7% |
 
@@ -92,7 +92,7 @@ additional columns that store values from original studies.
 | Category     | Datasets | Studies | Meta-analyses |  Values | Significant |
 |:-------------|---------:|--------:|--------------:|--------:|------------:|
 | curated      |        8 |  37,269 |               | 123,277 |       43.4% |
-| meta         |        9 |  56,176 |         7,426 | 198,084 |       43.0% |
+| meta         |        9 |  53,704 |         7,090 | 189,251 |       42.2% |
 | replications |        3 |     388 |            28 |   1,956 |       44.2% |
 | scrape       |        4 | 155,322 |               | 165,653 |       69.4% |
 
