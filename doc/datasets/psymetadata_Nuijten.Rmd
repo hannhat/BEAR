@@ -16,10 +16,15 @@ _psymetadata_ is an R package that curates multiple open datasets from published
 Processing was minimal. We used regular expressions to extract year labels from titles. We dropped some invalid rows (missing, non-finite, or non-positive standard errors).
 Signed z-values were computed as effect sizes divided by their standard errors.
 
+Within BEAR's psymetadata dataset, 1,630 estimates are raw correlations,
+1,083 are Fisher-transformed correlations and 5,801 are standardised mean
+differences. Nuijten has 2,439 Fisher-transformed correlations.
+
 **Study characteristics:**
 
 - **psymetadata:** the designs of the primary studies are not harmonised across the imported datasets.
-- **psymetadata:** the effect-size measure is not harmonised across the imported datasets.
+- `measure` distinguishes correlations from standardised mean
+  differences; `effect_scale` distinguishes raw correlations, Fisher-transformed
+  correlations and standardised mean differences.
 - **psymetadata:** records are grouped by original psymetadata dataset.
 - **Nuijten:** the designs of the primary studies are not classified.
-- **Nuijten:** BEAR retains the reported effect estimates and standard errors without a harmonised effect-size measure.

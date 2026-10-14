@@ -242,13 +242,11 @@ dtlist[["JagerLeek"]] <-
 
 dtlist[["Sladekova"]] <-
   readRDS("data/Sladekova.rds") %>%
-  filter(!is.na(b)) %>%
-  mutate(method = NA,
-         measure = "Zr",
-         z = b/se,
-         year = NA) %>%
+  filter(effect_scale == "fisher_z", !is.na(b)) %>%
+  mutate(method = NA, year = NA) %>%
   filter(!is.na(metaid)) %>%
-  transmute(metaid, studyid, method, measure, z, b, se, year, ss)
+  transmute(metaid, studyid, doi_meta, topic, method, measure, effect_scale,
+            z, b, se, year, ss)
 
 # Metapsy -----
 
@@ -708,12 +706,13 @@ bear <- bear %>%
       `Rate Ratio` = "rate_ratio", `Geometric Ratio` = "geometric_ratio",
       `Other Ratio` = "ratio", Other = "other"
     ),
-    effect_scale = coalesce(effect_scale, case_when(
+    # Explicit source uncertainty takes precedence over an inferred raw scale.
+    effect_scale = na_if(coalesce(effect_scale, case_when(
       measure %in% c("correlation", "regression_coefficient", "eta_squared",
                      "partial_eta_squared", "mean_difference",
                      "median_difference", "percentage_difference",
                      "risk_difference") ~ "raw"
-    )),
+    )), "unclassified"),
     method = recode(tolower(method), quasi = "quasi_experimental",
                     unknown = NA_character_)
   )

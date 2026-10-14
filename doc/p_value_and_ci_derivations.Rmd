@@ -76,22 +76,23 @@ otherwise, we use its absolute value.
 ## Working with correlations
 
 In literature where correlations are typically reported as outcomes (e.g.
-psychology) we find mixtures of Fisher-transformed and "raw" correlations. 
+psychology) we find mixtures of Fisher-transformed and "raw" correlations, 
+typically Pearson $r$. 
 
 As a reminder, for Pearson correlation $r$ with a verified sample size $n>3$, 
 Fisher's transformation is
 
 $$
 f = \operatorname{atanh}(r),\qquad
-\mathrm{SE}(f) = \frac{1}{\sqrt{n-3}},\qquad
+\mathrm{SE}(f) = \frac{1}{\sqrt{n-3}}.\qquad
 $$
-
+(We use $f$ notation since $z$ is prominently used in BEAR for z-values.)
 If a sample size is unavailable but the standard error for "raw" correlation
 is supplied, we can approximate the transformed standard error by
 $\mathrm{SE}(f)\approx\mathrm{SE}(r)/(1-r^2)$ for $|r|<1$.
 
-However, in BEAR we use the quantity that was reported by authors. 
-We use the "scale" column in BEAR to differentiate "fisher_z" and "raw" correlations.
+However, in BEAR we use the scale that was chosen by authors. 
+We use the "effect_scale" column in BEAR to differentiate "fisher_z" and "raw" correlations.
 
 In some data we found mixing of SE's and point estimates on different scales; 
 in that case we did not include these observations in `BEAR.rds`. Note as well 
