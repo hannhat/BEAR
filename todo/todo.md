@@ -13,6 +13,38 @@ DO we not have labels for it? Can't we figure that from documentation and data?
 Is there additional information that we should add to WWC.rds?
 
 
+## Create a default workflow for creating and editing data dictionaries for individual datasets
+
+I do not like the current one, we should have one good helper function that
+builds it from .md files (or some other documentation files) that works 
+across all datasets.
+
+Data dictionary should just contain descriptions of each column, supplied by the user,
+but kept up to date by the LLM agents. Creating/updating this would be part of 
+the default workflow.
+This should be done alongside checking that the column naming conventions and
+deffinitions follow the general BEAR workflow.
+
+Then, for each dataset when it's created, let's have a summary of variables written 
+into .md file which
+gives readable, plain text summaries of counts and distributions of different columns.
+This will be useful for version control of all datasets. They could be written into
+a version controlled folder. This creation of .md file should be done by an elegant
+concise helper function. It is updated every time that processing script is ran 
+for a given dataset.
+
+The website would take this summary and render it nicely, the way it currently
+does for e.g. clinicaltrials.gov, Sladekova, Cochrane. 
+
+When we work on individual datasets in the future, we should gradually create data
+dictionaries for them, but you don't have to automatically do it for all of them
+right now.
+You should document this workflow within the repo so that it is adhered to in the future.
+
+When the workflow is prepared, you should apply it to existing data dictionaries 
+and then identify the most complicated dataset which does not have a data dictionary
+yet. Then test it on that dataset.
+
 
 ## Add roadmap and additions on the website
 
