@@ -1,6 +1,7 @@
 # Save the Reproducibility Project: Psychology source table for BEAR.
 # Source package: https://osf.io/ytpuq/overview
 
+source("R/write_summary.R")
 osc_raw <- read.csv("data_raw/OSC/reproducibility_package/rpp_data.csv",
                     header = TRUE, fileEncoding = "latin1")
 char_cols <- vapply(osc_raw, is.character, logical(1))
@@ -12,4 +13,4 @@ osc_raw$doi_replication <- "10.1126/science.aac4716"
 #             p_repl = T_pval_USE..R.) %>% 
 #   mutate(z_orig = qnorm(1 - p_orig/2),
 #          z_repl = qnorm(1 - p_repl/2))
-saveRDS(osc_raw, "data/OSC.rds")
+save_rds_summary(osc_raw, "data/OSC.rds")

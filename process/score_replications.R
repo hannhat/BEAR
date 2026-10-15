@@ -2,6 +2,7 @@
 # The canonical output is `data/SCORE_replications.rds`.
 
 suppressPackageStartupMessages(library(tidyverse))
+source("R/write_summary.R")
 source("R/helpers.R")
 source("process/score_helpers.R")
 
@@ -308,7 +309,7 @@ print(validation_checks, n = nrow(validation_checks), width = Inf)
 stopifnot(all(validation_checks$passed))
 stopifnot(!anyDuplicated(score_replications$estimate_id))
 
-saveRDS(score_replications, "data/SCORE_replications.rds")
+save_rds_summary(score_replications, "data/SCORE_replications.rds")
 
 cat("\nMain replication discipline counts:\n")
 print(count(score_replication_pairs_main, discipline), n = Inf)

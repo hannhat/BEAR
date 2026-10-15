@@ -1,6 +1,7 @@
 library(dplyr)
 library(stringr)
 library(readr)
+source("R/write_summary.R")
 
 # We previously used a data cut that was processed by Kraft/Mead (2023)
 # dtlist[["WWC"]] <- read_csv("data/WWC/Kraft_wwc_merge.csv", show_col_types = FALSE) %>% 
@@ -98,4 +99,4 @@ wwc_cleaned <- wwc_findings %>%
     Outcome_Domain, Is_Subgroup, method, b, pval, ss, year, study_id
   ) 
 
-saveRDS(wwc_cleaned, "data/WWC.rds")
+save_rds_summary(wwc_cleaned, "data/WWC.rds")

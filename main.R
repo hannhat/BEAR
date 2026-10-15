@@ -15,6 +15,8 @@
 
 source("workflow/build_bear.R")
 # Output: BEAR.rds
+# Dataset saves also refresh tracked summaries in data_summary/.
+# To refresh summaries alone: source("workflow/write_data_summaries.R").
 # Metadata categories: R/settings.R; dictionary: doc/bear_data_dictionary.md.
 
 

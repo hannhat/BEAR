@@ -52,6 +52,20 @@ them to a dataset-specific documentation or audit folder with clear names.
 Audit files should make validation and later review easier; they are not a
 replacement for a clean canonical `.rds` output.
 
+Source `R/write_summary.R` near the top of each processing script. Save each
+public dataset with `save_rds_summary(df, "data/Example.rds")` in place of
+`saveRDS()`. This also writes `data_summary/Example.md`, with row and column
+counts, missingness and variable distributions. Track the summary and review
+its diff whenever the dataset changes. Check unexpected count, type or
+distribution changes before rebuilding `BEAR.rds`.
+
+Use `write_summary(df, "data_summary/Example.md")` to write a summary alone.
+Run `Rscript --vanilla workflow/write_data_summaries.R` to refresh summaries
+from all saved datasets without rerunning processing or changing the RDS
+files. See [Dataset summaries](../data_summary/README.md) for interpretation
+and examples. Raw acquisition files and intermediate checkpoints retain
+ordinary `saveRDS()` calls.
+
 ## 3. Keep Helper Scope Narrow
 
 Put reusable shared helpers in `R/` only when they are genuinely reused or

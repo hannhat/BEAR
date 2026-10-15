@@ -15,6 +15,7 @@
 # purposes of his study.
 
 library(tidyverse)
+source("R/write_summary.R")
 
 clean_character_columns <- function(data) {
   data |>
@@ -110,4 +111,4 @@ if (file.exists(study_mapping_path)) {
 }
 stopifnot(nrow(dat) == rows_before,
           all(is.na(dat$doi_study[dat$sample != "Briggs"])))
-saveRDS(dat, "data/ArelBundock.rds")
+save_rds_summary(dat, "data/ArelBundock.rds")

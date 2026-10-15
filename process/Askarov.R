@@ -1,4 +1,5 @@
 library(haven)
+source("R/write_summary.R")
 df <- read_dta("data_raw/Askarov/data/Mandatory data-sharing 30 Aug 2022.dta")
-saveRDS(df, file = "data/Askarov.rds")
+save_rds_summary(df, file = "data/Askarov.rds")
 rm(df)

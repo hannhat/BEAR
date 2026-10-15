@@ -3,6 +3,7 @@
 # Study IDs are approximate within-meta-analysis groupings.
 
 library(tidyverse)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 source("R/z_derivation_helpers.R")
 
@@ -129,6 +130,6 @@ onedf <- imap(dfs, function(df, metaid) {
   dplyr::bind_rows(.id = "metaid") %>%
   relocate(studyid, study_label)
 
-saveRDS(onedf, "data/Sladekova.rds")
+save_rds_summary(onedf, "data/Sladekova.rds")
 rm(onedf)
 rm(dfs)

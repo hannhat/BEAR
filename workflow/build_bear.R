@@ -4,6 +4,7 @@ library(tidyverse)
 library(metafor) #for CDSR calculations of effect sizes (binary data)
 library(dplyr)
 library(stringi) #for cleaning up some study names
+source("R/write_summary.R")
 filter <- dplyr::filter
 
 dtlist <- list()
@@ -728,7 +729,7 @@ source("R/validate_bear_schema.R")
 bear <- bear %>% select(all_of(bear_schema_columns))
 check_bear_schema(bear)
 
-saveRDS(bear, "BEAR.rds")
+save_rds_summary(bear, "BEAR.rds")
 
 source("workflow/write_site_metrics.R")
 write_site_metrics(calculate_site_metrics(bear))

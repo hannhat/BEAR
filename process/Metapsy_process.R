@@ -1,4 +1,5 @@
 library(tidyverse)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 metapsy <- readRDS("data_raw/Metapsy/data/Metapsy_Jan2026.rds") %>%
   lapply(function(df) {
@@ -81,4 +82,4 @@ metapsy <- metapsy %>% mutate(doi = case_when(
   TRUE ~ doi
 ))
 metapsy <- select(metapsy, -reference) %>% rename(doi_study = doi)
-saveRDS(metapsy, "data/Metapsy.rds")
+save_rds_summary(metapsy, "data/Metapsy.rds")

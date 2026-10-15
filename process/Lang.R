@@ -3,6 +3,7 @@
 
 library(tidyverse)
 library(haven)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 
 lang_path <- "data_raw/Lang/23259data/Data/cr_append.dta"
@@ -197,7 +198,7 @@ if (!"doi" %in% names(lang)) lang$doi <- NA_character_
 lang <- lang %>% mutate(doi = coalesce(unname(manual_dois[studyid]), doi))
 stopifnot(n_distinct(lang$source_title[lang$studyid == "Lang_paper_474"]) == 1L)
 lang <- lang %>% rename(doi_study = doi)
-saveRDS(lang, "data/Lang.rds")
+save_rds_summary(lang, "data/Lang.rds")
 
 # Validation summary -----
 

@@ -4,6 +4,7 @@
 library(dplyr)
 library(stringr)
 library(lubridate)
+source("R/write_summary.R")
 
 source("R/z_derivation_helpers.R")
 
@@ -76,4 +77,4 @@ z_table_small %>%
   mutate_if(is.character, as.factor) %>%
   summary()
 
-saveRDS(z_table_small, out_path)
+save_rds_summary(z_table_small, out_path)

@@ -1,4 +1,5 @@
 library(tidyverse)
+source("R/write_summary.R")
 load("data_raw/Yang/data/EcoEvo_PB_datasets.Rdata")
 
 # Datafile dat_processed_rob.csv may be downloaded from 
@@ -36,7 +37,7 @@ df <- rbind(
     mutate(measure = "SMD")
 )
 
-saveRDS(df, "data/Yang.rds")
+save_rds_summary(df, "data/Yang.rds")
 rm(df)
 
 

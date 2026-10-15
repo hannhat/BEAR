@@ -3,6 +3,7 @@
 
 library(dplyr)
 library(lubridate)
+source("R/write_summary.R")
 
 source("R/z_derivation_helpers.R")
 
@@ -77,4 +78,4 @@ validation_checks <- tibble::tibble(
 print(validation_checks, n = nrow(validation_checks), width = Inf)
 stopifnot(all(validation_checks$passed))
 
-saveRDS(d_clean, out_path)
+save_rds_summary(d_clean, out_path)

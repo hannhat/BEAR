@@ -1,4 +1,5 @@
 library(tidyverse)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 
 exercise <- read_csv("data_raw/Bartos/data/data_processed.csv") %>%
@@ -20,4 +21,4 @@ if (file.exists("doi/Bartos/final/doi_mapping.rds")) {
   exercise <- join_identifiers(exercise,
     readRDS("doi/Bartos/final/doi_mapping.rds"), "reference", "doi")
 }
-saveRDS(rename(exercise, doi_meta = doi), file = "data/Bartos.rds")
+save_rds_summary(rename(exercise, doi_meta = doi), file = "data/Bartos.rds")

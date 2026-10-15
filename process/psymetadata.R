@@ -1,6 +1,7 @@
 # Prepare package datasets, retaining their documented effect-size scales.
 library(psymetadata)
 library(tidyverse)
+source("R/write_summary.R")
 
 ps_items <- data(package = "psymetadata")$results %>%
   as_tibble() %>%
@@ -106,6 +107,6 @@ df_psymetadata <-
                                   TRUE ~ "smd")) %>%
   relocate(measure, effect_scale, .before = z)
 
-saveRDS(df_psymetadata, "data/psymetadata.rds")
+save_rds_summary(df_psymetadata, "data/psymetadata.rds")
 rm(df_psymetadata)
 
