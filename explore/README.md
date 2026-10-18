@@ -19,3 +19,9 @@ relevant code into `process/`, `workflow/`, `R/`, `paper/`, or `site/`.
 
 BEAR-internal explorations are tracked by default when they are clean and lean.
 External metascience or secondary-output explorations are ignored by default.
+
+## Folder Notes
+
+- `ctgov_snapshot_comparison/`: BEAR-internal. Compares ClinicalTrials.gov
+  effects built from different AACT snapshots, to check that a snapshot
+  refresh changes the data only in expected ways.
