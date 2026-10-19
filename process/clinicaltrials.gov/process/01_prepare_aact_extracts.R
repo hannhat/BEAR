@@ -9,6 +9,9 @@ library(tibble)
 
 source("process/clinicaltrials.gov/lib/paths.R")
 
+# Cached extracts below are reused only if they come from this snapshot.
+ctgov_reset_caches_if_snapshot_changed()
+
 snapshot_zip <- ctgov_snapshot_zip
 out_dir <- ctgov_intermediate_dir
 candidate_csv <- file.path(out_dir, "outcome_measurements_first_pass_candidates.csv")

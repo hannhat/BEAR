@@ -6,17 +6,25 @@ separately, validates them, and merges them only at the end. The final merge
 prefers author-reported effects for linked overlaps and adds selected raw-only
 effects where no author-reported effect is available.
 
-Run from the BEAR project root:
+Run from the BEAR project root, with `CTGOV_SNAPSHOT_ZIP` set to the AACT
+pipe-delimited flat-file zip (no unzipping needed):
 
 ```sh
-Rscript --vanilla process/clinicaltrials.gov/run_pipeline.R
+CTGOV_SNAPSHOT_ZIP=data_raw/clinicaltrials.gov/<DDMMYYYY>/<file>.zip \
+  Rscript --vanilla process/clinicaltrials.gov/run_pipeline.R
 ```
+
+Any snapshot with the same tables and columns can be used. Cached derived
+files are rebuilt automatically when the snapshot changes, and
+snapshot-specific counts are written to
+`data_raw/clinicaltrials.gov/validation/snapshot_counts.csv`.
 
 ## Layout
 
 - `process/`: dataset-building scripts.
 - `validate/`: checks, diagnostics, and manual-review queues.
-- `lib/`: shared paths and small workflow assets.
+- `lib/`: shared paths, snapshot handling (`snapshot.R`), and small workflow
+  assets.
 - `run_pipeline.R`: canonical run order.
 
 ## Output Roots
