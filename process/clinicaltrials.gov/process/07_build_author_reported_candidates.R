@@ -1,5 +1,5 @@
 # Build BEAR-candidate author-reported ClinicalTrials.gov effects.
-# Reuses the reduced author raw artifact unless explicit rebuild is requested.
+# Reads the reduced author analysis table written by step 00.
 
 library(dplyr)
 library(purrr)
@@ -14,20 +14,18 @@ author_raw_path <- file.path(ctgov_derived_dir, "author_reported_raw.rds")
 legacy_author_raw_path <- file.path(ctgov_derived_dir, "clinicaltrials.gov_aug2025.rds")
 author_candidate_path <- file.path(ctgov_derived_dir, "author_reported_candidates.rds")
 
-rebuild_author <- identical(Sys.getenv("CTGOV_REBUILD_AUTHOR"), "1")
-
-if (!file.exists(author_raw_path) || rebuild_author) {
-  if (file.exists(legacy_author_raw_path) && !rebuild_author) {
-    author_raw <- readRDS(legacy_author_raw_path)
-  } else {
-    stop(
-      "Missing author raw artifact. Run process/clinicaltrials_prepare_data.R ",
-      "or set CTGOV_REBUILD_AUTHOR=1 after preparing the AACT flat files."
-    )
-  }
+# The legacy file name is read only for setups prepared before step 00 existed;
+# both are removed when the snapshot changes, so neither can be stale.
+if (file.exists(author_raw_path)) {
+  author_raw <- readRDS(author_raw_path)
+} else if (file.exists(legacy_author_raw_path)) {
+  author_raw <- readRDS(legacy_author_raw_path)
   saveRDS(author_raw, author_raw_path)
 } else {
-  author_raw <- readRDS(author_raw_path)
+  stop(
+    "Missing author raw artifact. Run ",
+    "process/clinicaltrials.gov/process/00_prepare_author_analyses.R first."
+  )
 }
 
 author_links_path <- file.path(ctgov_intermediate_dir, "author_analysis_links.rds")

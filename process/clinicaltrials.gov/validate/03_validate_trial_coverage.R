@@ -267,11 +267,19 @@ raw_trial_check <- raw_endpoint %>%
   left_join(trial_flags %>% count(nct_id, name = "n_coverage_rows"), by = "nct_id") %>%
   mutate(n_coverage_rows = coalesce(n_coverage_rows, 0L))
 
+coverage_counts <- c(
+  author_rows = nrow(old_bear),
+  author_trials = n_distinct(old_bear$nct_id),
+  raw_endpoint_trials = n_distinct(raw_endpoint$nct_id),
+  trials_with_both = n_distinct(intersect(old_bear$nct_id, raw_endpoint$nct_id))
+)
+ctgov_record_counts("validate_03_trial_coverage", coverage_counts)
+
 stopifnot(
-  nrow(old_bear) == 76349,
-  n_distinct(old_bear$nct_id) == 22068,
-  n_distinct(raw_endpoint$nct_id) == 19871,
-  n_distinct(intersect(old_bear$nct_id, raw_endpoint$nct_id)) == 10149,
+  coverage_counts[["author_rows"]] > 0,
+  coverage_counts[["raw_endpoint_trials"]] > 0,
+  coverage_counts[["trials_with_both"]] <=
+    min(coverage_counts[["author_trials"]], coverage_counts[["raw_endpoint_trials"]]),
   all(raw_trial_check$n_coverage_rows == 1L)
 )
 

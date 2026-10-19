@@ -13,9 +13,19 @@ candidate effect rows.
 
 ## Source Snapshot
 
-The local AACT snapshot is:
+The AACT snapshot is chosen with the `CTGOV_SNAPSHOT_ZIP` environment
+variable: the path to the pipe-delimited flat-file zip downloaded from AACT,
+for example `data_raw/clinicaltrials.gov/<DDMMYYYY>/<file>.zip`. Scripts read
+tables directly from the zip; it does not need to be unzipped. Any snapshot
+with the same tables and columns can be used without code changes. The
+published files were built from the 12 August 2025 snapshot
+(`12082025/a1hlrix83cqvhi5qn0jya3f8mdik.zip`).
 
-`data_raw/clinicaltrials.gov/12082025/a1hlrix83cqvhi5qn0jya3f8mdik.zip`
+`derived/snapshot_stamp.txt` records the snapshot the cached derived files
+came from. When `CTGOV_SNAPSHOT_ZIP` points to a different snapshot, the
+cached files (`derived/intermediate/` and the author analysis table) are
+removed and rebuilt automatically. Changes to extraction code are not
+detected; clear `derived/intermediate/` by hand after changing it.
 
 Scripts assume they are run from the BEAR project root.
 
@@ -24,28 +34,31 @@ Scripts assume they are run from the BEAR project root.
 Run the canonical pipeline with:
 
 ```sh
-Rscript --vanilla process/clinicaltrials.gov/run_pipeline.R
+CTGOV_SNAPSHOT_ZIP=data_raw/clinicaltrials.gov/<DDMMYYYY>/<file>.zip \
+  Rscript --vanilla process/clinicaltrials.gov/run_pipeline.R
 ```
 
 The runner executes:
 
-1. `process/01_prepare_aact_extracts.R`
-2. `process/07_build_author_reported_candidates.R`
-3. `process/02_derive_endpoint_effects.R`
-4. `validate/01_validate_endpoint_effects.R`
-5. `process/03_classify_endpoint_source_rows.R`
-6. `process/04_extract_prepost_side_tables.R`
-7. `validate/02_validate_prepost_side_tables.R`
-8. `validate/03_validate_trial_coverage.R`
-9. `validate/04_validate_author_overlap.R`
-10. `process/05_build_trial_characteristics.R`
-11. `process/06_build_endpoint_candidates.R`
-12. `process/08_select_raw_endpoint_scale.R`
-13. `process/09_merge_author_and_raw.R`
-14. `validate/05_validate_final_merge.R`
+1. `process/00_prepare_author_analyses.R`
+2. `process/01_prepare_aact_extracts.R`
+3. `process/07_build_author_reported_candidates.R`
+4. `process/02_derive_endpoint_effects.R`
+5. `validate/01_validate_endpoint_effects.R`
+6. `process/03_classify_endpoint_source_rows.R`
+7. `process/04_extract_prepost_side_tables.R`
+8. `validate/02_validate_prepost_side_tables.R`
+9. `validate/03_validate_trial_coverage.R`
+10. `validate/04_validate_author_overlap.R`
+11. `process/05_build_trial_characteristics.R`
+12. `process/06_build_endpoint_candidates.R`
+13. `process/08_select_raw_endpoint_scale.R`
+14. `process/09_merge_author_and_raw.R`
+15. `validate/05_validate_final_merge.R`
 
 `process/clinicaltrials.gov/lib/paths.R` defines the shared source and output
-roots. The domain mapping used by trial-characteristics construction is
+roots and reads `CTGOV_SNAPSHOT_ZIP`. `lib/snapshot.R` handles the snapshot
+stamp, cache invalidation and snapshot-specific counts. The domain mapping used by trial-characteristics construction is
 `process/clinicaltrials.gov/lib/domain_mesh_map.csv`.
 
 ## Output Roots
@@ -101,9 +114,10 @@ effect with validation metadata attached. It remains the all-scale raw
 candidate artifact.
 
 `derived/author_reported_raw.rds` has one row per reduced author-reported
-AACT `outcome_analyses` row joined to trial and outcome metadata. It is reused
-by default. Regeneration should be requested explicitly because it requires
-returning to the source AACT tables.
+AACT `outcome_analyses` row joined to trial and outcome metadata. Step 00
+writes it from the snapshot zip. Step 07 still reads the older
+`derived/clinicaltrials.gov_aug2025.rds` if step 00 has not been run, for
+setups prepared before step 00 existed.
 
 `derived/author_reported_candidates.rds` has one row per author-reported
 completed primary-outcome row with recoverable `z`. It preserves `outcome_id`,
@@ -189,7 +203,11 @@ The primary denominator in `validate/03_validate_trial_coverage.R` is completed
 randomized parallel interventional trials with at least one primary outcome in
 the local AACT snapshot.
 
-The verified current counts are:
+Snapshot-specific counts are recorded in `validation/snapshot_counts.csv`
+at each run (steps 00, 02, 06 and validate/03), with changes against the
+previous snapshot reported in the run log. The checks compare counts within a
+run, not against fixed numbers, so any snapshot can be processed. The counts
+for the August 2025 snapshot were:
 
 - 250,444 prioritized endpoint candidate rows.
 - 41,608 rows in `validation/trial_coverage_audit.csv`.
@@ -203,8 +221,8 @@ Left joins from `data/clinicaltrialsgov.rds` and
 `derived/endpoint_candidates.rds` to `derived/trial_characteristics.rds`
 preserve their original row counts.
 
-The final auditable author/raw candidate merge and public analytic file
-currently have 151,313 rows from completed studies. The main BEAR build
+In the August 2025 snapshot, the final auditable author/raw candidate merge and public analytic file
+had 151,313 rows from completed studies. The main BEAR build
 excludes studies with 20 or more candidate effect rows, which removes 1,046
 studies and 69,968 rows in the current snapshot, leaving 81,345 rows from
 26,400 studies for the BEAR ClinicalTrials.gov component. A looser rule allowing
@@ -217,8 +235,9 @@ as laboratory panels, symptom panels, or repeated time-specific measurements.
 Large AACT tables should be streamed or reduced before joining. Keep IDs as
 character in reduced extracts. Do not retain full raw chunks after filtering;
 drop large objects with `rm()` where useful and call `gc()` between heavy
-pipeline stages. Reuse `derived/intermediate/` extracts when the source
-snapshot and extraction rules have not changed.
+pipeline stages. `derived/intermediate/` extracts are reused while the
+snapshot is unchanged and rebuilt automatically when it changes; clear them by
+hand after changing extraction rules.
 
 Do not materialize both legacy `derived/legacy_analysis_output/` artifacts and
 canonical derived artifacts in memory in the same script. The legacy directory
