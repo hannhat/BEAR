@@ -22,6 +22,7 @@ External metascience or secondary-output explorations are ignored by default.
 
 ## Folder Notes
 
-- `ctgov_snapshot_comparison/`: BEAR-internal. Compares ClinicalTrials.gov
-  effects built from different AACT snapshots, to check that a snapshot
-  refresh changes the data only in expected ways.
+- `aact_snapshot/`: BEAR-internal. Explorations of the ClinicalTrials.gov data
+  built from AACT snapshots: comparing snapshots
+  (`ctgov_snapshot_comparison/`) and comparing author-reported with
+  raw-derived effects (`raw_versus_author_effects/`).

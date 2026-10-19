@@ -24,7 +24,7 @@ Inputs:
 Run from the project root with:
 
 ```r
-Rscript --vanilla explore/ctgov_snapshot_comparison/ctgov_snapshot_comparison_v1.R
+Rscript --vanilla explore/aact_snapshot/ctgov_snapshot_comparison/ctgov_snapshot_comparison_v1.R
 ```
 
 Outputs, written to the ignored `output/` folder:

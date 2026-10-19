@@ -10,3 +10,5 @@
   identical.
 - Added the `old_rows_not_in_new_v1` output: 512 old rows from 256 trials
   (51 from dropped trials, 461 unmatched rows in 231 shared trials).
+- Moved the folder from `explore/` to `explore/aact_snapshot/` and updated
+  the output path and run command.

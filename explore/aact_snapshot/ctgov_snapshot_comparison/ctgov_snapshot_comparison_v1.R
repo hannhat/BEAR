@@ -11,7 +11,7 @@ library(tidyr)
 old_path <- "data_raw/clinicaltrials.gov/_archive/clinicaltrialsgov_BEAR_data_b0f8860.rds"
 new_path <- "data/clinicaltrialsgov.rds"
 new_studies_path <- "data_raw/clinicaltrials.gov/13102026/briz20jy4pzxe9cbsvkjw6lki2oa/studies.txt"
-out_dir <- "explore/ctgov_snapshot_comparison/output"
+out_dir <- "explore/aact_snapshot/ctgov_snapshot_comparison/output"
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Read -----
