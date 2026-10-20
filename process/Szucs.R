@@ -4,6 +4,7 @@
 
 library(tidyverse)
 library(R.matlab)
+source("R/write_summary.R")
 
 source("R/helpers.R")
 
@@ -211,7 +212,7 @@ stopifnot(all(core_checks$pass))
 dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
 dir.create(dirname(validation_path), showWarnings = FALSE, recursive = TRUE)
 
-saveRDS(szucs, output_path)
+save_rds_summary(szucs, output_path)
 write_csv(validation_counts, counts_path)
 
 validation_md <- c(

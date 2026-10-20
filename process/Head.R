@@ -2,6 +2,7 @@
 # https://datadryad.org/dataset/doi:10.5061/dryad.79d43
 # accessed by WW June 2025
 library(tidyverse)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 
 # WW the original analysis file was not available, but a different raw data file that
@@ -52,7 +53,7 @@ d %>%
   join_identifiers(rename(pmid, first.doi = doi), "first.doi", "pmid") %>%
   select(journal.name, first.doi, pmid, p.value, operator, section, Category, year) %>% 
   mutate(doi_study = first.doi) %>%
-  saveRDS("data/Head.rds") #compression: 30x smaller than CSV
+  save_rds_summary("data/Head.rds") #compression: 30x smaller than CSV
   # write_csv("data_raw/Head/derived/p_values_cleaned_ww.csv")
 
 rm(d)

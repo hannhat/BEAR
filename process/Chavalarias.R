@@ -2,6 +2,7 @@
 # https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6FMTT3
 
 library(tidyverse)
+source("R/write_summary.R")
 
 chava <- rbind(
   read_csv("data_raw/Chavalarias/data/medline_full_txt_pv.csv", 
@@ -12,4 +13,4 @@ chava <- rbind(
     mutate(source = "MEDLINE")
 ) 
 
-saveRDS(chava, file = "data/Chavalarias.rds")
+save_rds_summary(chava, file = "data/Chavalarias.rds")

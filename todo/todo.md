@@ -6,6 +6,46 @@ editor_options:
 
 # To-do items for BEAR
 
+
+## What are the effect size measures in WWC
+
+DO we not have labels for it? Can't we figure that from documentation and data?
+Is there additional information that we should add to WWC.rds?
+
+
+## Create a default workflow for creating and editing data dictionaries for individual datasets
+
+I do not like the current one, we should have one good helper function that
+builds it from .md files (or some other documentation files) that works 
+across all datasets.
+
+Data dictionary should just contain descriptions of each column, supplied by the user,
+but kept up to date by the LLM agents. Creating/updating this would be part of 
+the default workflow.
+This should be done alongside checking that the column naming conventions and
+deffinitions follow the general BEAR workflow.
+
+Then, for each dataset when it's created, let's have a summary of variables written 
+into .md file which
+gives readable, plain text summaries of counts and distributions of different columns.
+This will be useful for version control of all datasets. They could be written into
+a version controlled folder. This creation of .md file should be done by an elegant
+concise helper function. It is updated every time that processing script is ran 
+for a given dataset.
+
+The website would take this summary and render it nicely, the way it currently
+does for e.g. clinicaltrials.gov, Sladekova, Cochrane. 
+
+When we work on individual datasets in the future, we should gradually create data
+dictionaries for them, but you don't have to automatically do it for all of them
+right now.
+You should document this workflow within the repo so that it is adhered to in the future.
+
+When the workflow is prepared, you should apply it to existing data dictionaries 
+and then identify the most complicated dataset which does not have a data dictionary
+yet. Then test it on that dataset.
+
+
 ## Add roadmap and additions on the website
 
 People should be able to see what's coming next This to-do should partly
@@ -102,26 +142,39 @@ there is an easier classification here?
 
 ## Small dataset-specific checks
 
-### Issue: Sladekova study IDs and `abs(yi) > 1` brief
+### Sladekova: remaining work after scale and DOI fixes
 
-Current status: `process/Sladekova.R` already reconstructs study IDs
-from DOI or descriptive fields where possible. In the current processed
-file, 9,748 of 11,591 rows use a DOI or descriptive label; 1,843 rows
-(15.9%) still fall back to row-unique IDs because no descriptive study
-label was available after processing.
+Completed 14 October 2026: BEAR includes only the 2,758 clearly
+Fisher-transformed estimates. The individual file retains all 11,634 rows
+with explicit scale classifications. The old `abs(yi) > 1` brief is resolved:
+those values include legitimate transformed effects, and the blanket
+correlation transformation has been removed. Evidence and source links are
+in [the processing note](../process/Sladekova/README.md); the processor is
+`process/Sladekova/Sladekova.R`.
 
-Short brief for Bartos: BEAR treats the Sladekova `yi` values as
-correlation-scale effects and applies a Fisher z transform. In the local
-source files I find 43 rows from 10 files with `abs(yi) > 1`, mainly
-`B109_1.csv` (20 rows) and `A23_1.csv`/`A23_2.csv` (7 rows each). These
-values cannot be ordinary correlations, so I need to know whether they
-are coding errors, a different effect-size scale in those files, or rows
-that should be excluded before applying the correlation-scale transform.
+Meta-analysis DOIs are complete for the selected BEAR rows: all 2,758 rows
+have `doi_meta`, representing 12 papers. The individual file covers 87/88
+papers; A191 remains deliberately unassigned and is outside the Fisher-only
+subset. Primary-study DOI matching remains deferred; see
+[the DOI action plan](doi_action_plan.md).
 
-Potential follow-up after reply: if these rows are invalid correlations,
-update `process/Sladekova.R` to drop or separately classify them before
-the Fisher transform, then document the row count change in
-`doc/datasets/Sladekova.Rmd`.
+Remaining work:
+
+- Refresh the Sladekova mixture fit and derived plots/summaries after the
+  Fisher-only restriction.
+- Improve study grouping where source evidence permits: 1,843 individual-file
+  rows have fallback IDs, including 578 rows retained in BEAR. Numeric counters
+  should not be treated as study identifiers without checking their meaning.
+- Further sample-size recovery concerns 940 rows in the individual file;
+  none of the selected BEAR rows has a missing sample size.
+- Review excluded source scales if we later want to include more estimates:
+  3,380 raw correlations with Fisher variances, 230 possible mismatches and
+  253 unclear effects. The 5,013 correctly paired raw correlations also need
+  appropriate z derivation before inclusion; no automatic repair is planned.
+- B281 is outside Fisher-only BEAR; its topic remains missing in the full
+  file because source coders disagree. Resolving this
+  is optional and would require additional evidence, rather than a majority
+  rule.
 
 ## Data dictionaries for richer public datasets
 

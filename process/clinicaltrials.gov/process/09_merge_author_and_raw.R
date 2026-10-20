@@ -4,6 +4,7 @@
 library(dplyr)
 library(readr)
 library(stringr)
+source("R/write_summary.R")
 
 source("process/clinicaltrials.gov/lib/paths.R")
 
@@ -342,7 +343,7 @@ stopifnot(
   )] == "SMD")
 )
 
-saveRDS(public, out_path)
+save_rds_summary(public, out_path)
 
 message("Saved merged ClinicalTrials.gov audit file with ", nrow(merged), " rows.")
 message("Saved public ClinicalTrials.gov file with ", nrow(public), " rows and ",

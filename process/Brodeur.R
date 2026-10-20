@@ -1,6 +1,7 @@
 # Preserve raw Brodeur data and optionally attach final DOI adjudications.
 library(tidyverse)
 library(haven)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 
 df <- read_dta("data_raw/Brodeur/data/merged.dta", encoding = "latin1") %>%
@@ -24,4 +25,4 @@ if (file.exists("doi/Brodeur/final/doi_map.csv")) {
   df <- df %>% select(-source_doi) %>% mutate(doi = NA_character_)
 }
 df <- df %>% select(-title_key) %>% rename(doi_study = doi)
-saveRDS(df, file = "data/Brodeur.rds")
+save_rds_summary(df, file = "data/Brodeur.rds")

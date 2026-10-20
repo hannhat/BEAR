@@ -19,8 +19,13 @@ Dataset-specific updates:
 - **Cochrane**
     - removed binary rows with zero or 100% event rates in both arms; these rows remain in the fuller processed dataset
     - withdrawn reviews are no longer used; other small changes to choice of data
+- **Sladekova**: attempted to make some fixes around measured correlations;
+  BEAR.rds now includes only the 17% of rows that were clearly Fisher-transformed 
+  correlations; the individual file has all estimates with extra detail about scale.
 - **WWC**: excluded subgroup results from the main dataset; fixed study IDs, now findings from the same source citation share an identifier.
 
+There are a lot of small corrections to many datasets, I will only start listing
+these once we have a more stable workflow for processing datasets in v4.
 
 
 # BEAR v2 — 5 June 2026 (last release)

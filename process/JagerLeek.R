@@ -1,4 +1,5 @@
 library(tidyverse)
+source("R/write_summary.R")
 source("R/doi_lookup.R")
 load("data_raw/JagerLeek/data/pvalueData.rda")
 
@@ -12,4 +13,4 @@ if (file.exists("doi/JagerLeek/final/doi_mapping.rds")) {
   jager_leek$doi_study <- join_identifiers(jager_leek,
     readRDS("doi/JagerLeek/final/doi_mapping.rds"), "pubmedID", "doi")$doi
 }
-saveRDS(jager_leek, "data/JagerLeek.rds")
+save_rds_summary(jager_leek, "data/JagerLeek.rds")

@@ -2,6 +2,7 @@
 # The canonical output is `data/SCORE_all_claims.rds`.
 
 suppressPackageStartupMessages(library(tidyverse))
+source("R/write_summary.R")
 source("R/helpers.R")
 source("process/score_helpers.R")
 
@@ -262,7 +263,7 @@ validation_checks <- tibble(
 print(validation_checks, n = nrow(validation_checks), width = Inf)
 stopifnot(all(validation_checks$passed))
 
-saveRDS(score_all_claims, "data/SCORE_all_claims.rds")
+save_rds_summary(score_all_claims, "data/SCORE_all_claims.rds")
 
 cat("\nClaim-level summary:\n")
 print(claim_level_summary, n = nrow(claim_level_summary), width = Inf)

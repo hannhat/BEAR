@@ -1,4 +1,4 @@
-# Shared z-derivation helpers for trial-style p-value and CI data.
+# Shared z-derivation helpers for p-values, CIs and correlations.
 # This code was derived by LLMs from various workflows that were
 # previously put together for individual datasets. The objective
 # is to use as many of these helpers across datasets as possible,
@@ -142,6 +142,35 @@ z_from_t_value <- function(t_value, df) {
     NA_real_
   )
   sign(t_value) * z_from_p_value(p)
+}
+
+# Prepare correlations on the Fisher scale; retain already-transformed inputs.
+# Verified sample sizes take precedence over delta-method conversion of raw SEs.
+derive_correlation_z <- function(effect, n = NA_real_, se = NA_real_,
+                                 effect_scale = "raw") {
+  x <- tibble::tibble(b = effect, n, se, effect_scale)
+  stopifnot(all(x$effect_scale %in% c("raw", "fisher_z")))
+  raw <- x$effect_scale == "raw"
+  valid_r <- !is.na(x$b) & abs(x$b) <= 1
+  b <- x$b
+  se <- x$se
+  b[raw] <- atanh(ifelse(valid_r[raw], x$b[raw], NA_real_))
+  se[raw] <- NA_real_
+
+  known_n <- raw & valid_r & abs(x$b) < 1 & is.finite(x$n) & x$n > 3
+  if (any(known_n)) {
+    prepared <- metafor::escalc(measure = "ZCOR", ri = x$b[known_n],
+                               ni = x$n[known_n])
+    se[known_n] <- sqrt(prepared$vi)
+  }
+  # metafor omits boundary effects; their Fisher variance remains defined.
+  boundary <- raw & valid_r & abs(x$b) == 1 & is.finite(x$n) & x$n > 3
+  se[boundary] <- 1 / sqrt(x$n[boundary] - 3)
+  known_se <- raw & valid_r & is.na(x$n) & abs(x$b) < 1 &
+    is.finite(x$se) & x$se >= 0
+  se[known_se] <- x$se[known_se] / (1 - x$b[known_se]^2)
+  se[!is.finite(se) | se < 0] <- NA_real_
+  tibble::tibble(b, se, z = b/se)
 }
 
 # Derive candidate CI and p-value z-statistics, then choose CI if trusted.

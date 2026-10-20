@@ -3,6 +3,7 @@
 # Source package: https://osf.io/fanre/
 
 library(tidyverse)
+source("R/write_summary.R")
 
 zip_path <- "data_raw/ManyLabs/reproducibility_package/OSFdata.zip"
 out_path <- "data/ManyLabs2.rds"
@@ -145,7 +146,7 @@ manylabs2 <- map2(
     orig.ss = as.numeric(orig.ss)
   )
 
-saveRDS(manylabs2, out_path)
+save_rds_summary(manylabs2, out_path)
 
 # Checks -----
 

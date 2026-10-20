@@ -11,19 +11,50 @@ publication-bias adjustment methods in psychology datasets?
 Data and materials are available through OSF.
 
 **Data description and source:**
-The authors reanalysed 433 meta-analytic datasets from 90 psychology papers.
-BEAR represents the imported meta-analytic datasets as row-level effect sizes, with approximate study groupings.
+The authors reanalysed 433 meta-analytic datasets from 90 psychology papers,
+selected from a random sample of meta-analyses published in 2008 and 2018.
 
 **Data processing:**
-We use rows with available effect estimates and sampling variances. Effect
-sizes on the correlation scale are transformed to Fisher's z scale, with
-standard errors derived from the reported variances. Signed z-values were
-computed as transformed effect sizes divided by their standard errors.
+Only a minority of estimates (N = 2,758) are clearly Fisher-transformed
+correlations. We include these as part of BEAR. The individual dataset,
+`Sladekova.rds`, also includes 5,013 estimates based on raw correlations and
+another 3,863 estimates where the scale is unclear or mixed. 
+During processing and cleaning of data, 
+we found some cases of Fisher-scale variances being used with point estimates of
+raw correlations. We also find appreciably heavier tails for z-values from entries that
+were not Fisher-transformed. For that reason we chose to include 
+Fisher-transformed correlations in main BEAR dataset. This is conservative, but we retain all 
+data in the individual dataset. We use the standard Fisher-scale calculation described in
+_Working with correlations_ for its Fisher-transformed entries.
 
 **Study characteristics:**
 
-- **Study ID:** we use DOI where available, then a descriptive label and year, 
-  then the label, and finally a row-specific ID. Overall labelling of studies in
-  this dataset is problematic.
+- **Study ID:** we use a descriptive source label and year where available,
+  otherwise the label or a row-specific ID. Note that
+  for some sets we are not able to identify observations belonging to the same paper; 
+  `study_label` has source text, e.g. author-year.
+- **Year:** the available source study or publication year.
 - **Meta-analysis ID:** we use the source filename to distinguish meta-analyses.
+- **Meta-analysis DOI:** `doi_meta` identifies the original meta-analytic
+  paper, using the authors' sampling inventories. It covers 87 of 88 papers;
+  the remaining paper is unassigned. Primary-study DOIs are not included.
+- **Topic:** the psychology subfield coded for the source meta-analytic paper;
+  one conflicting classification is left missing.
 - The designs of the primary studies are not classified.
+
+**Individual dataset dictionary:**
+
+| Column | Description |
+|---|---|
+| `studyid` | Study grouping within a meta-analysis |
+| `study_label` | Study description derived from source data, often author-year. |
+| `metaid` | Identifier of the source meta-analytic dataset. |
+| `doi_meta` | DOI of the original meta-analytic paper. |
+| `topic` | Psychology subfield of the meta-analytic paper. |
+| `measure` | Type of effect, such as a correlation, where known. |
+| `effect_scale` | `fisher_z` or `raw` correlations; three other categories used when raw correlation was paired with variance for Fisher's z, there was a possible mismatch, or if we do not have enough information to determine scale. These latter categories are guesses by an LLM. |
+| `b` | Effect estimate supplied by authors. |
+| `se` | Square root of the variance supplied by authors; note that this may be on a different scale from `b` (see effect_scale). |
+| `z` | Effect divided by `se`; questionable scale pairings may give misleading values. |
+| `ss` | Number of participants or units used to obtain the estimate, where available. |
+| `year` | Study or publication year as determined by authors. |
