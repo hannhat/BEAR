@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-23 percentages, non-inferiority tests and step 01 cache
+
+- Author-reported estimates and CI bounds with `%`, `percent` or `x 100` in
+  `param_type` are divided by 100 before z derivation (`percent_rescaled`
+  flags them), so ratios reported x100 are tested against 1.
+- Added `non_inferiority_type` and `non_inferiority_description` from
+  `outcome_analyses` to the public file; for non-inferiority and equivalence
+  analyses the reported p-value tests a margin, not zero.
+- Step 01 now saves the first-pass candidate IDs, so runs with cached extracts
+  match fresh runs. Step 07 needs step 00 output; the old
+  `clinicaltrials.gov_aug2025.rds` lacks the new columns.
+
 ## 2026-10-19 snapshot-independent pipeline
 
 - The AACT snapshot is now set with the `CTGOV_SNAPSHOT_ZIP` environment
