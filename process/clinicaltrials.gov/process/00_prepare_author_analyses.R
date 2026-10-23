@@ -45,7 +45,8 @@ oa <- read_snapshot_table(
   "outcome_analyses.txt",
   col_select = c(nct_id, outcome_id, id, param_type, param_value, ci_percent,
                  ci_n_sides, ci_lower_limit, ci_upper_limit, p_value,
-                 p_value_modifier)
+                 p_value_modifier, non_inferiority_type,
+                 non_inferiority_description)
 ) %>%
   mutate(outcome_id = as.character(outcome_id)) %>%
   rename(outcome_analysis_id = id) %>%
@@ -70,7 +71,8 @@ author_raw <- oa %>%
     outcome_analysis_id,
     param_type, param_value,
     ci_percent, ci_n_sides, ci_lower_limit, ci_upper_limit,
-    p_value, p_value_modifier
+    p_value, p_value_modifier,
+    non_inferiority_type, non_inferiority_description
   )
 
 stopifnot(

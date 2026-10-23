@@ -92,7 +92,8 @@ z_table <- eff_clean %>%
     intervention_model, observational_model, primary_purpose, masking,
     outcome_type, outcome_title, outcome_time_frame, method,
     param_type, estimate, lower, upper, p_value, p_value_modifier,
-    ci_percent, ci_n_sides, measure_class, scale,
+    ci_percent, ci_n_sides, non_inferiority_type, non_inferiority_description,
+    measure_class, percent_rescaled, scale,
     effect, b, se, z, z_ci, z_p, z_source, use_ci, sym_ratio,
     z_operator, p_sides
   ) %>%
