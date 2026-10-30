@@ -1,60 +1,62 @@
 # clinicaltrialsgov
 
 - Rows: 164,453
-- Columns: 96
+- Columns: 99
 
 ## Variable type: character
 
-|Variable                    | Missing| Unique| Empty|Common                                                        |
-|:---------------------------|-------:|------:|-----:|:-------------------------------------------------------------|
-|effect_id                   |       0| 164453|     0|                                                              |
-|author_effect_id            |   88100|  76353|     0|                                                              |
-|raw_effect_id               |   76353|  88100|     0|                                                              |
-|effect_source               |       0|      2|     0|raw_derived: 88100; author_reported: 76353                    |
-|result_id                   |   36734|  59383|     0|                                                              |
-|nct_id                      |       0|  29852|     0|                                                              |
-|outcome_id                  |       0|  56676|     0|                                                              |
-|outcome_analysis_id         |   88100|  76353|     0|                                                              |
-|brief_title                 |       0|  29724|     0|                                                              |
-|official_title              |     757|  29327|     0|                                                              |
-|study_type                  |       0|      2|     0|INTERVENTIONAL: 157755; OBSERVATIONAL: 6698                   |
-|phase                       |   48426|      7|     0|PHASE2: 44300; PHASE3: 30822; PHASE1: 20241                   |
-|overall_status              |       0|      1|     0|completed: 164453                                             |
-|enrollment_type             |       2|      1|     0|actual: 164451                                                |
-|allocation                  |   12425|      2|     0|RANDOMIZED: 146260; NON_RANDOMIZED: 5768                      |
-|intervention_model          |    6906|      5|     0|PARALLEL: 137079; CROSSOVER: 10058; SINGLE_GROUP: 7725        |
-|primary_purpose             |    8420|      9|     0|TREATMENT: 98313; PREVENTION: 31101; BASIC_SCIENCE: 8541      |
-|observational_model         |  157852|      7|     0|COHORT: 3989; CASE_CONTROL: 1098; CASE_ONLY: 1092             |
-|masking                     |    7139|      5|     0|NONE: 42051; DOUBLE: 38798; QUADRUPLE: 30771                  |
-|comparator_summary          |       0|     16|     0|                                                              |
-|domain_all                  |       0|    801|     0|                                                              |
-|domain_source               |       0|      3|     0|mesh: 130887; missing: 22657; text_fallback_only: 10909       |
-|domain_primary              |       0|     18|     0|                                                              |
-|intervention_types_all      |       0|    185|     0|                                                              |
-|intervention_type_primary   |       0|     12|     0|                                                              |
-|lead_sponsor_name           |       0|   4578|     0|                                                              |
-|lead_sponsor_class          |       0|      5|     0|industry: 104078; other: 51757; other_gov: 4600               |
-|outcome_type                |       0|      1|     0|PRIMARY: 164453                                               |
-|outcome_title               |       0|  49996|     0|                                                              |
-|outcome_time_frame          |       0|  24891|     0|                                                              |
-|measurement_stratum_id      |   76353|  55019|     0|                                                              |
-|measurement_title           |   76353|  24352|     0|                                                              |
-|measurement_units           |   76353|   4625|     0|                                                              |
-|measure_class               |   26476|     14|     0|                                                              |
-|measure_detailed            |   26476|     14|     0|                                                              |
-|scale                       |       0|      4|     0|raw: 57936; smd: 54891; probit: 33209                         |
-|z_operator                  |       0|      3|     0|=: 156071; &gt;: 7485; &lt;: 897                              |
-|linked_result_group_ids     |  114996|  38498|     0|                                                              |
-|linked_group_codes          |  114996|    167|     0|                                                              |
-|method                      |  121329|   1946|     0|                                                              |
-|param_type                  |  114576|   3456|     0|                                                              |
-|p_value_modifier            |  146884|      9|     0|&lt;: 15121; =: 1413; &gt;: 1007                              |
-|non_inferiority_type        |   88100|      8|     0|SUPERIORITY: 25855; SUPERIORITY_OR_OTHER: 21354; OTHER: 15154 |
-|non_inferiority_description |  146420|   8167|     0|                                                              |
-|raw_group_t_id              |   76353|  36211|     0|                                                              |
-|raw_group_c_id              |   76353|  30590|     0|                                                              |
-|raw_group_t_title           |   76353|  16124|     0|                                                              |
-|raw_group_c_title           |   76353|   9948|     0|                                                              |
+|Variable                          | Missing| Unique| Empty|Common                                                        |
+|:---------------------------------|-------:|------:|-----:|:-------------------------------------------------------------|
+|effect_id                         |       0| 164453|     0|                                                              |
+|author_effect_id                  |   88100|  76353|     0|                                                              |
+|raw_effect_id                     |   76353|  88100|     0|                                                              |
+|effect_source                     |       0|      2|     0|raw_derived: 88100; author_reported: 76353                    |
+|result_id                         |   36734|  59383|     0|                                                              |
+|nct_id                            |       0|  29852|     0|                                                              |
+|outcome_id                        |       0|  56676|     0|                                                              |
+|outcome_analysis_id               |   88100|  76353|     0|                                                              |
+|brief_title                       |       0|  29724|     0|                                                              |
+|official_title                    |     757|  29327|     0|                                                              |
+|study_type                        |       0|      2|     0|INTERVENTIONAL: 157755; OBSERVATIONAL: 6698                   |
+|phase                             |   48426|      7|     0|PHASE2: 44300; PHASE3: 30822; PHASE1: 20241                   |
+|overall_status                    |       0|      1|     0|completed: 164453                                             |
+|enrollment_type                   |       2|      1|     0|actual: 164451                                                |
+|allocation                        |   12425|      2|     0|RANDOMIZED: 146260; NON_RANDOMIZED: 5768                      |
+|intervention_model                |    6906|      5|     0|PARALLEL: 137079; CROSSOVER: 10058; SINGLE_GROUP: 7725        |
+|primary_purpose                   |    8420|      9|     0|TREATMENT: 98313; PREVENTION: 31101; BASIC_SCIENCE: 8541      |
+|observational_model               |  157852|      7|     0|COHORT: 3989; CASE_CONTROL: 1098; CASE_ONLY: 1092             |
+|masking                           |    7139|      5|     0|NONE: 42051; DOUBLE: 38798; QUADRUPLE: 30771                  |
+|comparator_summary                |       0|     16|     0|                                                              |
+|domain_all                        |       0|    801|     0|                                                              |
+|domain_source                     |       0|      3|     0|mesh: 130887; missing: 22657; text_fallback_only: 10909       |
+|domain_primary                    |       0|     18|     0|                                                              |
+|intervention_types_all            |       0|    185|     0|                                                              |
+|intervention_type_primary         |       0|     12|     0|                                                              |
+|lead_sponsor_name                 |       0|   4578|     0|                                                              |
+|lead_sponsor_class                |       0|      5|     0|industry: 104078; other: 51757; other_gov: 4600               |
+|outcome_type                      |       0|      1|     0|PRIMARY: 164453                                               |
+|outcome_title                     |       0|  49996|     0|                                                              |
+|outcome_time_frame                |       0|  24891|     0|                                                              |
+|measurement_stratum_id            |   76353|  55019|     0|                                                              |
+|measurement_title                 |   76353|  24352|     0|                                                              |
+|measurement_units                 |   76353|   4625|     0|                                                              |
+|measure_class                     |   26476|     14|     0|                                                              |
+|measure_detailed                  |   26476|     14|     0|                                                              |
+|scale                             |       0|      4|     0|raw: 57936; smd: 54891; probit: 33209                         |
+|z_operator                        |       0|      3|     0|=: 156071; &gt;: 7485; &lt;: 897                              |
+|linked_result_group_ids           |  114996|  38498|     0|                                                              |
+|linked_group_codes                |  114996|    167|     0|                                                              |
+|method                            |  121329|   1946|     0|                                                              |
+|param_type                        |  114576|   3456|     0|                                                              |
+|p_value_modifier                  |  146884|      9|     0|&lt;: 15121; =: 1413; &gt;: 1007                              |
+|non_inferiority_type              |   88100|      8|     0|SUPERIORITY: 25855; SUPERIORITY_OR_OTHER: 21354; OTHER: 15154 |
+|non_inferiority_description       |  146420|   8167|     0|                                                              |
+|standardized_non_inferiority_type |   88100|      5|     0|SUPERIORITY: 67295; NON_INFERIORITY: 4655; EQUIVALENCE: 2855  |
+|extracted_margin                  |  157488|    860|     0|                                                              |
+|raw_group_t_id                    |   76353|  36211|     0|                                                              |
+|raw_group_c_id                    |   76353|  30590|     0|                                                              |
+|raw_group_t_title                 |   76353|  16124|     0|                                                              |
+|raw_group_c_title                 |   76353|   9948|     0|                                                              |
 
 ## Variable type: logical
 
@@ -76,6 +78,7 @@
 |is_cell_or_gene_therapy_trial |       0|   1132| 163321|
 |is_diagnostic_trial           |       0|   6499| 157954|
 |has_industry_sponsor          |       0| 110896|  53557|
+|description_exists            |   88100|  18033|  58320|
 |direction_unknown             |   76353|  24416|  63684|
 |raw_multi_arm_trial           |   76353|  50177|  37923|
 

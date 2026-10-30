@@ -23,6 +23,7 @@ pipeline_scripts <- c(
   "process/clinicaltrials.gov/process/06_build_endpoint_candidates.R",
   "process/clinicaltrials.gov/process/08_select_raw_endpoint_scale.R",
   "process/clinicaltrials.gov/process/09_merge_author_and_raw.R",
+  "process/clinicaltrials.gov/process/10_integrate_manual_review.R",
   "process/clinicaltrials.gov/validate/05_validate_final_merge.R"
 )
 

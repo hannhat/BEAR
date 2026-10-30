@@ -23,9 +23,16 @@ snapshot-specific counts are written to
 
 - `process/`: dataset-building scripts.
 - `validate/`: checks, diagnostics, and manual-review queues.
-- `lib/`: shared paths, snapshot handling (`snapshot.R`), and small workflow
-  assets.
+- `lib/`: shared paths, snapshot handling (`snapshot.R`), non-inferiority
+  rules (`non_inferiority.R`), and small workflow assets.
+- `lib/manual_review/`: tracked decisions from manual review, applied by step
+  10.
+- `review/`: helper scripts for manual review.
 - `run_pipeline.R`: canonical run order.
+
+Step 10 applies the recorded non-inferiority decisions and reports
+descriptions that still need review. See
+`non_inferiority_review_procedure.md`.
 
 ## Output Roots
 
@@ -34,7 +41,7 @@ snapshot-specific counts are written to
   extracts.
 - `data_raw/clinicaltrials.gov/validation/`: QC summaries and diagnostics.
 - `data_raw/clinicaltrials.gov/validation/manual_review/`: sampled review
-  queues.
+  queues and the non-inferiority review queue.
 - `data/clinicaltrialsgov.rds`: public BEAR-facing author-preferred merge,
   keeping completed studies without the main-BEAR row-count restriction.
 

@@ -8,11 +8,13 @@ library(stringr)
 library(lubridate)
 
 source("process/clinicaltrials.gov/lib/paths.R")
+source("process/clinicaltrials.gov/lib/non_inferiority.R")
 source("R/z_derivation_helpers.R")
 
 author_raw_path <- file.path(ctgov_derived_dir, "author_reported_raw.rds")
 legacy_author_raw_path <- file.path(ctgov_derived_dir, "clinicaltrials.gov_aug2025.rds")
 author_candidate_path <- file.path(ctgov_derived_dir, "author_reported_candidates.rds")
+ni_descriptions_path <- file.path(ctgov_intermediate_dir, "non_inferiority_descriptions.rds")
 
 # The legacy file name is read only for setups prepared before step 00 existed;
 # both are removed when the snapshot changes, so neither can be stale.
@@ -99,12 +101,31 @@ z_table <- eff_clean %>%
   ) %>%
   filter(!is.na(z))
 
+# Rule-based test type and margin from non_inferiority_type and
+# non_inferiority_description; recorded manual review decisions are applied
+# in step 10. The description-level table feeds that review
+ni_descriptions <- ctgov_ni_classify_descriptions(z_table)
+
+z_table <- z_table %>%
+  left_join(ni_descriptions %>% select(non_inferiority_description, rule_type, rule_margin),
+            by = "non_inferiority_description") %>%
+  mutate(
+    description_exists = !is.na(non_inferiority_description) &
+      str_trim(non_inferiority_description) != "",
+    standardized_non_inferiority_type = ctgov_ni_resolve_type(
+      rule_type, non_inferiority_type, description_exists),
+    extracted_margin = if_else(description_exists, rule_margin, NA_character_)
+  ) %>%
+  select(-rule_type, -rule_margin)
+
 validation_checks <- tibble::tibble(
   check = c(
     "required_columns",
     "valid_z_operator_values",
     "no_duplicate_outcome_analysis_id",
-    "all_saved_rows_have_z"
+    "all_saved_rows_have_z",
+    "valid_standardized_non_inferiority_type",
+    "margin_only_with_description"
   ),
   passed = c(
     all(c(
@@ -113,7 +134,9 @@ validation_checks <- tibble::tibble(
     ) %in% names(z_table)),
     all(is.na(z_table$z_operator) | z_table$z_operator %in% c("=", "<", ">")),
     anyDuplicated(z_table %>% select(nct_id, outcome_analysis_id)) == 0,
-    all(!is.na(z_table$z))
+    all(!is.na(z_table$z)),
+    all(z_table$standardized_non_inferiority_type %in% ctgov_ni_types),
+    all(z_table$description_exists | is.na(z_table$extracted_margin))
   )
 )
 
@@ -121,4 +144,6 @@ print(validation_checks, n = nrow(validation_checks), width = Inf)
 stopifnot(all(validation_checks$passed))
 
 saveRDS(z_table, author_candidate_path)
-message("Saved ", nrow(z_table), " author-reported candidate rows.")
+saveRDS(ni_descriptions, ni_descriptions_path)
+message("Saved ", nrow(z_table), " author-reported candidate rows; ",
+        nrow(ni_descriptions), " distinct non-inferiority descriptions.")

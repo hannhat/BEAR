@@ -26,6 +26,9 @@ ctgov_validation_dir <- file.path(ctgov_root, "validation")
 ctgov_manual_review_dir <- file.path(ctgov_validation_dir, "manual_review")
 
 ctgov_domain_map_path <- file.path(ctgov_process_dir, "lib", "domain_mesh_map.csv")
+# Tracked decisions from manual review, applied by step 10
+ctgov_review_decisions_dir <- file.path(ctgov_process_dir, "lib", "manual_review")
+ctgov_ni_review_path <- file.path(ctgov_review_decisions_dir, "non_inferiority_review.csv")
 
 dir.create(ctgov_derived_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(ctgov_intermediate_dir, recursive = TRUE, showWarnings = FALSE)

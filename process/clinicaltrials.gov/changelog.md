@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-30 standardised non-inferiority test type and margin
+
+- Added `description_exists`, `standardized_non_inferiority_type` and
+  `extracted_margin` for author-reported rows (`NA` for raw-derived rows).
+  The type is classified from `non_inferiority_description` when present and
+  mapped from `non_inferiority_type` otherwise; the margin is the value stated
+  in the description, as text.
+- Rules are in `lib/non_inferiority.R` (step 07). New step
+  `10_integrate_manual_review.R` applies recorded decisions from
+  `lib/manual_review/non_inferiority_review.csv` (2,032 descriptions for the
+  13 October 2026 snapshot) and writes descriptions that still need review to
+  `validation/manual_review/non_inferiority_review_queue.csv`.
+- `non_inferiority_review_procedure.md` documents the rules and the review
+  conventions; helper scripts are in `review/`, and `AGENTS.md` points agents
+  to the procedure.
+
 ## 2026-10-23 percentages, non-inferiority tests and step 01 cache
 
 - Author-reported estimates and CI bounds with `%`, `percent` or `x 100` in
