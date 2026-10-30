@@ -18,6 +18,8 @@ Any snapshot with the same tables and columns can be used. Cached derived
 files are rebuilt automatically when the snapshot changes, and
 snapshot-specific counts are written to
 `data_raw/clinicaltrials.gov/validation/snapshot_counts.csv`.
+`LLM_run_pipeline.md` gives step-by-step instructions for processing a new
+snapshot, written for an LLM coding agent.
 
 ## Layout
 

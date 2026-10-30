@@ -1,5 +1,11 @@
 Instructions in the repository's root `AGENTS.md` also apply here.
 
+## Running the pipeline on a new snapshot
+
+Follow `LLM_run_pipeline.md` step by step when asked to process a new AACT
+snapshot: preparation, the run, checks against the previous file, the
+non-inferiority review, documentation updates and the report.
+
 ## Non-inferiority test type and margin
 
 The columns `description_exists`, `standardized_non_inferiority_type` and

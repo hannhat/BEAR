@@ -18,8 +18,9 @@ variable: the path to the pipe-delimited flat-file zip downloaded from AACT,
 for example `data_raw/clinicaltrials.gov/<DDMMYYYY>/<file>.zip`. Scripts read
 tables directly from the zip; it does not need to be unzipped. Any snapshot
 with the same tables and columns can be used without code changes. The
-published files were built from the 12 August 2025 snapshot
-(`12082025/a1hlrix83cqvhi5qn0jya3f8mdik.zip`).
+current files were built from the 13 October 2026 snapshot
+(`13102026/briz20jy4pzxe9cbsvkjw6lki2oa.zip`); earlier releases used the 12
+August 2025 snapshot (`12082025/a1hlrix83cqvhi5qn0jya3f8mdik.zip`).
 
 `derived/snapshot_stamp.txt` records the snapshot the cached derived files
 came from. When `CTGOV_SNAPSHOT_ZIP` points to a different snapshot, the
@@ -54,11 +55,15 @@ The runner executes:
 12. `process/06_build_endpoint_candidates.R`
 13. `process/08_select_raw_endpoint_scale.R`
 14. `process/09_merge_author_and_raw.R`
-15. `validate/05_validate_final_merge.R`
+15. `process/10_integrate_manual_review.R`
+16. `validate/05_validate_final_merge.R`
 
 `process/clinicaltrials.gov/lib/paths.R` defines the shared source and output
 roots and reads `CTGOV_SNAPSHOT_ZIP`. `lib/snapshot.R` handles the snapshot
-stamp, cache invalidation and snapshot-specific counts. The domain mapping used by trial-characteristics construction is
+stamp, cache invalidation and snapshot-specific counts. `lib/non_inferiority.R`
+holds the non-inferiority classification rules, and `lib/manual_review/`
+holds tracked manual review decisions applied by step 10. The domain mapping
+used by trial-characteristics construction is
 `process/clinicaltrials.gov/lib/domain_mesh_map.csv`.
 
 ## Output Roots
@@ -122,7 +127,11 @@ setups prepared before step 00 existed.
 `derived/author_reported_candidates.rds` has one row per author-reported
 completed primary-outcome row with recoverable `z`. It preserves `outcome_id`,
 `outcome_analysis_id`, linked result-group metadata where available,
-`measure_class`, `b`, `se`, `z`, `z_operator`, and source metadata.
+`measure_class`, `b`, `se`, `z`, `z_operator`, `z_source`,
+`percent_rescaled`, `non_inferiority_type`, the rule-based non-inferiority
+columns, and source metadata. Step 07 also writes
+`derived/intermediate/non_inferiority_descriptions.rds`, one row per distinct
+`non_inferiority_description`.
 
 `derived/raw_endpoint_selected_for_bear.rds` has one selected raw-derived row
 per eligible raw contrast. Continuous rows use standardized mean difference
@@ -138,8 +147,10 @@ identifiable.
 `derived/clinicaltrialsgov_merged_candidates.rds` is the auditable final merge
 candidate before public trimming. `data/clinicaltrialsgov.rds` is the public
 BEAR-facing copy after retaining author and selected raw rows separately,
-marking `include_in_bear`, and keeping completed studies. The main BEAR build
-applies the fewer-than-20 candidate-row rule downstream.
+marking `include_in_bear`, and keeping completed studies. Step 10 then
+applies the recorded manual review decisions to it in place, without changing
+its rows. The main BEAR build applies the fewer-than-20 candidate-row rule
+downstream.
 
 The public table retains `measure_class` (effect family) and `scale` (units
 of `b` and `se`) as separate fields. For example, reported ratio measures
@@ -189,6 +200,49 @@ keywords, and exact author-analysis group links. When direction is not
 recoverable, the row is retained with explicit warning flags rather than
 dropped solely for direction ambiguity.
 
+## Author-Reported Percentages
+
+Some author-reported estimates are stated as percentages. Rows whose
+`param_type` contains `%`, `percent` or `x 100`, and is not marked as already
+logged, have the estimate and confidence bounds divided by 100 before `z` is
+derived (`percent_rescaled`). For ratio measures analysed on the log scale,
+this tests against a null of 1 rather than 100, which changes `b`, `se`, `z`
+and the sign. For other measures, `b` and `se` become proportions and `z` is
+unchanged. The reported `estimate`, `lower` and `upper` columns keep the
+source values. `percent_rescaled` in `derived/author_reported_candidates.rds`
+flags the rescaled rows; most are differences in percentages, geometric
+ratios and other ratios. EU CTR and Barnett and Wren share the
+helper, but no rows there match the rule. Labels such as `Ratio of geometric
+means` without a percent keyword can still hold percentage values; no rule
+identifies these yet.
+
+## Non-Inferiority Test Type And Margin
+
+`non_inferiority_type` is often inconsistent with
+`non_inferiority_description`: many rows typed `EQUIVALENCE` or
+`NON_INFERIORITY` describe ordinary difference tests. Three columns record
+the test type and margin for author-reported rows (raw-derived rows are
+missing):
+
+- `description_exists`: whether a description is present.
+- `standardized_non_inferiority_type`: `SUPERIORITY`, `NON_INFERIORITY`,
+  `EQUIVALENCE`, `NON_INFERIORITY_OR_EQUIVALENCE` or `UNKNOWN`, classified
+  from the description when there is one and mapped from
+  `non_inferiority_type` otherwise. Without a description, the superiority
+  types and `OTHER` map to `SUPERIORITY`.
+- `extracted_margin`: the margin or threshold stated in the description, as
+  text.
+
+Step 07 applies regex rules from `lib/non_inferiority.R`. Step 10 replaces the
+rule-based values with the decisions recorded in
+`lib/manual_review/non_inferiority_review.csv` and writes descriptions the
+rules cannot settle to
+`validation/manual_review/non_inferiority_review_queue.csv`. Queued rows keep
+their rule-based values until reviewed. `non_inferiority_review_procedure.md`
+documents the rules, the review procedure and the classification conventions.
+Step 10's run message gives the number of reviewed and queued descriptions;
+counts by type are in `data_summary/clinicaltrialsgov.md`.
+
 ## Pre/Post Side Tables
 
 Pre/post side tables are diagnostic and sensitivity-oriented. They do not alter
@@ -206,27 +260,29 @@ the local AACT snapshot.
 Snapshot-specific counts are recorded in `validation/snapshot_counts.csv`
 at each run (steps 00, 02, 06 and validate/03), with changes against the
 previous snapshot reported in the run log. The checks compare counts within a
-run, not against fixed numbers, so any snapshot can be processed. The counts
-for the August 2025 snapshot were:
+run, not against fixed numbers, so any snapshot can be processed.
+`validation/snapshot_counts.csv` holds author-reported rows and trials, raw
+endpoint rows and trials, and trials with both, for every snapshot run.
+`validation/trial_coverage_summary.csv` gives the audit-table scope, the
+primary denominator and the coverage categories.
+`derived/trial_characteristics.rds` has one row per workflow-union `nct_id`,
+as many rows as `validation/trial_coverage_audit.csv`.
 
-- 250,444 prioritized endpoint candidate rows.
-- 41,608 rows in `validation/trial_coverage_audit.csv`.
-- 31,076 trials in the primary denominator.
-- 9,415 overlapping trials between old BEAR ClinicalTrials.gov rows and raw
-  endpoint effects.
-- 41,608 rows in `derived/trial_characteristics.rds`, one per workflow-union
-  `nct_id`.
+Versions of these notes before October 2026 gave 250,444 endpoint candidate
+rows for the August 2025 snapshot. That count predates the completed-only filter in step 01
+and includes about 1,900 non-completed trials; restricted to completed trials,
+the August 2025 run has 229,653 rows from 18,363 trials.
 
 Left joins from `data/clinicaltrialsgov.rds` and
 `derived/endpoint_candidates.rds` to `derived/trial_characteristics.rds`
 preserve their original row counts.
 
-In the August 2025 snapshot, the final auditable author/raw candidate merge and public analytic file
-had 151,313 rows from completed studies. The main BEAR build
-excludes studies with 20 or more candidate effect rows, which removes 1,046
-studies and 69,968 rows in the current snapshot, leaving 81,345 rows from
-26,400 studies for the BEAR ClinicalTrials.gov component. A looser rule allowing
-up to 99 candidate rows would retain 116,546 rows. The excluded rows are mostly
+`validation/clinicaltrialsgov_merge_summary.csv` gives the author-reported,
+selected raw-derived, overlapping (`include_in_bear = FALSE`) and final rows
+of the merge. The main BEAR build excludes studies with 20 or more candidate
+effect rows; `validation/clinicaltrialsgov_row_count_cutoff_impact.csv` gives
+the studies and rows this removes, and the same for looser cutoffs (up to
+999 rows). The excluded rows are mostly
 from studies where a primary outcome is recorded as many submeasurements, such
 as laboratory panels, symptom panels, or repeated time-specific measurements.
 
@@ -271,6 +327,12 @@ Author-overlap validation writes
 `validation/manual_review/author_raw_scale_aware_disagreements.csv`, which
 separate genuinely comparable author/raw scales from non-comparable pairs
 before summarising disagreements.
+
+Manual review integration (step 10) checks that the row count is unchanged,
+that every `standardized_non_inferiority_type` is a valid category, that
+raw-derived rows have no non-inferiority values, and that a margin appears
+only where a description exists. It reports the number of descriptions and
+rows waiting in the review queue.
 
 Raw scale selection writes `validation/raw_scale_comparison_summary.csv`. It
 summarises how often the selected scale changes sign, 0.05-significance side,
