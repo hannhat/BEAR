@@ -19,3 +19,8 @@ relevant code into `process/`, `workflow/`, `R/`, `paper/`, or `site/`.
 
 BEAR-internal explorations are tracked by default when they are clean and lean.
 External metascience or secondary-output explorations are ignored by default.
+
+## Folder Notes
+
+- `trialscout/`: BEAR-internal. Linking the TrialScout trial sample to BEAR's
+  ClinicalTrials.gov data.
